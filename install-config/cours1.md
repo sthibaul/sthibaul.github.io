@@ -1,5 +1,5 @@
-Installation & Configuration
-============================
+Cours1: Installation & Configuration
+====================================
 
 [https://dept-info.labri.fr/~thibault/enseignements.html#InstallConfiglpro](https://dept-info.labri.fr/~thibault/enseignements.html#InstallConfiglpro)
 
