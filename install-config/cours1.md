@@ -44,9 +44,7 @@ Démarrage:
 
 Aussi appelé "invite de commande", `cmd.exe`, ...
 
-## Commandes de bases
-
-### Must have
+## Must have
 
 * man ! : RTFM : Commande a connaitre par coeur. Permet d'avoir l'aide de n'importe quelle commande (y compris elle même)
 
@@ -72,7 +70,7 @@ Aussi appelé "invite de commande", `cmd.exe`, ...
 
 * top : Voir rapidement les conso de cpu/mémoire sous forme de graph
 
-### Des commandes qui lancent des commandes:
+## Des commandes qui lancent des commandes:
 
 * lsscsi : Liste les périphériques dit "SCSI". Ca concerne le bus lui même, donc les disques durs aussi, pas seulement les vieilles cartes des années 50
 
@@ -84,13 +82,13 @@ Aussi appelé "invite de commande", `cmd.exe`, ...
 
 * lscpu : Récupère des infos sur le CPU. On peut aussi les avoir avec un `cat /proc/cpuinfo`
 
-### Des commandes qui permettent de gérer les soft
+## Des commandes qui permettent de gérer les soft
 
 * dnf, apt, yast, pacam, pip, etc ... :
 
 * make, cmake, configure, etc ... 
 
-### Gérer les démons
+## Gérer les démons
 
 * systemctl status/restart/start/stop/enable/list-units
 
