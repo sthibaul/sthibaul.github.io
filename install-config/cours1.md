@@ -1,6 +1,8 @@
 Installation & Configuration
 ============================
 
+[https://dept-info.labri.fr/~thibault/enseignements.html#InstallConfiglpro](https://dept-info.labri.fr/~thibault/enseignements.html#InstallConfiglpro)
+
 # Linux ? Unix ?
 
 - Unix ~70 (e.g. AIX, Solaris, HP-UX)
