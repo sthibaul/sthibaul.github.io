@@ -84,7 +84,9 @@ Il y a plusieurs éléments qu'on doit/veut configurer en particulier:
 
 On va pouvoir se connecter à la VM depuis votre bureau, cela sera bien plus pratique que de passer par la console texte:
 
-`ssh root@192.168.56.10`
+```shell
+ssh root@192.168.56.10
+```
 
 (Si cela ne répond pas, lancer `nmcli con up enp0s8` dans la VM)
 
@@ -188,7 +190,7 @@ Pendant que la VM s'installe, revenez sur la partie installation et configuratio
 
 * Rallumez la VM, on peut voir le nouveau disque avec
 
-```shell
+```
 # fdisk -l
 Disque /dev/sdb : 20 GiB, 21474836480 octets, 41943040 secteurs
 Unités : secteur de 1 × 512 = 512 octets
@@ -281,14 +283,14 @@ A l'origine, il est un complément du protocole BOOTP (Bootstrap Protocol) qui e
 
 Le serveur écoute sur le port tcp 67. Les clients le contact via une requête en broadcast. L'échange client/serveur est le suivant:
 
-Client : DHCPDISCOVER (Broadcast) : Le client cherche les serveurs DHCP du réseau
-Serveur : DHCPOFFER : Le serveur répond en donnant les premiers paramètres
-Client: DHCPREQUEST : Le client demande une ip, un bail, un prolongement, etc...
-Serveur: DHCPDECLINE : Si le client demande une ip déjà allouée --> Refusée
-Serveur: DCHPACK : Réponse du serveur avec les paramètres IP
-Serveur: DHCPNAK : Réponse du serveur indiquant que le bail est échu ou si le client annonce une mauvaise configuration.
-Client: DHCPRELEASE : Le client libère son adresse
-Client: DHCPINFORM : Le client demande les paramètre locaux, dans le cas où il à déjà son adresse IP.
+* Client : DHCPDISCOVER (Broadcast) : Le client cherche les serveurs DHCP du réseau
+* Serveur : DHCPOFFER : Le serveur répond en donnant les premiers paramètres
+* Client: DHCPREQUEST : Le client demande une ip, un bail, un prolongement, etc...
+* Serveur: DHCPDECLINE : Si le client demande une ip déjà allouée --> Refusée
+* Serveur: DCHPACK : Réponse du serveur avec les paramètres IP
+* Serveur: DHCPNAK : Réponse du serveur indiquant que le bail est échu ou si le client annonce une mauvaise configuration.
+* Client: DHCPRELEASE : Le client libère son adresse
+* Client: DHCPINFORM : Le client demande les paramètre locaux, dans le cas où il à déjà son adresse IP.
 
 Dans la majorité des cas, l'échange est en 4 étapes : Discover -> Offer -> Request -> Ack
 
@@ -401,7 +403,7 @@ Le domaine .org englobe wikipedia.
 
 Attention à ne pas confondre zone et domaine. Le domaine wikipedia.org et la zone wikipedia.
 
-La résolution d'un nom de domaine se fait de manière récursive, de droite à gauche. On résous d'abords le .org, puis le nom wikipedia et enfin le .fr
+La résolution d'un nom de domaine se fait de manière récursive, de droite à gauche. On résout d'abords le .org, puis le nom wikipedia et enfin le .fr
 Cette résolution est faite par des serveurs dit "récursifs". Généralement vos FAI, mais certaines boites se configurent également des serveurs récursifs.
 Ces serveurs récursifs commencent par intéroger les serveurs dit "racine" au nombre de 9 dans le monde.
 
@@ -437,6 +439,7 @@ options {
   [...]
   forwarders { 10.0.2.3; }; /* Car le CREMI ne nous laisse pas résoudre nous-même */
 }
+[...]
 include "/var/named/named.adsillh";
 ```
 
@@ -474,7 +477,6 @@ $TTL 86400      ; 1 day
                                 38400      ; minimum (10 hours 40 minutes)
                                 )
                         NS      alma-server.adsillh.local.
-$ORIGIN adsillh.local.
 $TTL 3600       ; 1 hour
 alma-server          A       192.168.56.10
 ```
@@ -485,7 +487,6 @@ Et la reverse est à créer dans `/var/named/data/db.56.168.192`
 
 ```shell
 ; date file for zone adsillh.local
-$ORIGIN .
 $TTL 86400      ; 1 day
 @ IN SOA  adsillh.local. root.adsillh.local. (
                                 2024090101 ; serial
@@ -496,7 +497,6 @@ $TTL 86400      ; 1 day
                                 )
                         NS      alma-server.
                         A       192.168.56.10
-$ORIGIN 56.168.192.in-addr.arpa.
 10                      PTR     alma-server.adsillh.local.
 $TTL 3600       ; 1 hour
 ```
@@ -521,6 +521,8 @@ Les commandes suivantes doivent fonctionner :
 # nslookup 192.168.56.10
 # nslookup alma-server
 ```
+
+*Attention*, si vous changez quelque chose dans votre zone, il *faut* augmenter la valeur du serial, sinon la modification ne sera en général pas prise en compte !
 
 ### Précisions
 
