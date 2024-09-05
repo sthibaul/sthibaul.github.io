@@ -69,13 +69,14 @@ Il y a plusieurs éléments qu'on doit/veut configurer en particulier:
 
 * Réseau & nom d'hôte
   * La première carte réseau, on peut la connecter simplement, elle est branchée en NAT vers Internet
-  * Dans sa configuration, dans l'onglet `Général`, activez la connexion automatique
-  * La deuxième carte réseau, on l'active aussi
-  * Mais dans sa configuration on bascule en mode manuel, et on ajoute l'adresse 192.168.56.10 à la main:
+    * Dans sa configuration, dans l'onglet `Général`, activez la connexion automatique
+  * La deuxième carte réseau, on la connecte aussi, mais dans sa configuration:
+    * dans l'onglet `Général`, activez la connexion automatique
+    * on bascule en mode manuel,
+    * et on ajoute l'adresse 192.168.56.10 à la main:
 
   ![config-reseau-serveur](install_alma_srv_network.png)
   
-  * Aussi, dans l'onglet `Général`, activez la connexion automatique
 
 * Commencer l'installation
 * Cela dure une dizaine de minutes. Pendant ce temps, passez à la création+configuration+installation de la VM "client"
@@ -104,10 +105,10 @@ Retapez le nouveau mot de passe :
 passwd : mise à jour réussie de tous les jetons d'authentification.
 ```
 
-Et pour pouvoir se connecter en ssh sans avoir à taper le mot de passe, on peut utiliser un clé publique/privée. Depuis votre bureau:
+Et pour pouvoir se connecter en ssh sans avoir à taper le mot de passe, on peut utiliser un clé publique/privée. Depuis un terminal de votre poste:
 
 ```shell
-$ ssh-keygen # et ne pas mettre de passphrase pour simplifier
+$ ssh-keygen # garder toutes les options par défaut (pas de passphrase) pour simplifier
 $ ssh-copy-id admin@192.168.56.10
 $ ssh admin@192.168.56.10
 ```
