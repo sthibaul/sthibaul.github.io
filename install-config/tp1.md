@@ -372,7 +372,7 @@ Fastoche !
 
 ## Configuration
 
-Cela se passe dans `/etc/dhcp/dhcp.conf`, pour l'instant il n'y a rien. Vous pouvez consulter `man dhcpd.conf` pour les détails des options. On va se conformer à ce qui est prévu sur le sous-réseau hôté privé:
+Cela se passe dans `/etc/dhcp/dhcpd.conf`, pour l'instant il n'y a rien. Vous pouvez consulter `man dhcpd.conf` pour les détails des options. On va se conformer à ce qui est prévu sur le sous-réseau hôté privé:
 
 ```
 default-lease-time 86400; # bail de 24h
