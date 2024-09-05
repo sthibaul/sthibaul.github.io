@@ -182,7 +182,7 @@ Pendant que la VM s'installe, revenez sur la partie installation et configuratio
 
 # Si vous avez un souci de réseau
 
-Vérifiez votre configuration: dans `/etc/sysconfig/network-scripts/ifcfg-enp0s3`
+Vérifiez votre configuration: dans `/etc/sysconfig/network-scripts/ifcfg-enp0s3` (la première carte réseau)
 
 ```
 TYPE=Ethernet
@@ -202,7 +202,7 @@ DEVICE=enp0s3
 ONBOOT=yes
 ```
 
-Et dans `/etc/sysconfig/network-scripts/ifcfg-enp0s8`, sur le serveur:
+Et dans `/etc/sysconfig/network-scripts/ifcfg-enp0s8` (la deuxème carte réseau), sur le serveur:
 
 ```
 TYPE=Ethernet
@@ -227,6 +227,8 @@ DNS1=127.0.0.1
 DOMAIN=adsillh.local
 IPV4_DNS_PRIORITY=10
 ```
+
+(sur le client cela devrait être essentiellement comme `enp0s3`)
 
 Si vous changez quelque chose dans ces fichiers, il faut utiliser
 
