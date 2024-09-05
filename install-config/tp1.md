@@ -669,8 +669,7 @@ Si l'on force à n'utiliser que le réseau commun avec le serveur:
 
 ```shell
 # nmcli con down enp0s3
-# nmcli con down enp0s8
-# nmcli con up enp0s8
+# nmcli con down enp0s8 ; nmcli con up enp0s8
 ```
 
 On peut voir dans `/etc/resolv.conf` le serveur DNS bien configuré:
