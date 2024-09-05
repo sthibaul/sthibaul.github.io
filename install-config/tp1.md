@@ -44,7 +44,7 @@ pour vous faire un répertoire sur le disque local, où vous pourrez déposer to
 Avant de lancer la VM, il faut configurer ses cartes réseau
 
 * Dans `Fichier`, `Outils`, `Network Manager`
-* Cliquer sur créer
+* S'il n'y a pas encore de vboxnet0 dans la liste, Cliquer sur créer
 * Entrer dans les propriétés du réseau `vboxnet0`
 * Désactiver le serveur DHCP (puisqu'on va l'installer nous-même sur le serveur)
 * Appliquer
