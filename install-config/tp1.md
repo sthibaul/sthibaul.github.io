@@ -105,7 +105,7 @@ Retapez le nouveau mot de passe :
 passwd : mise à jour réussie de tous les jetons d'authentification.
 ```
 
-Et pour pouvoir se connecter en ssh sans avoir à taper le mot de passe, on peut utiliser un clé publique/privée. Depuis un terminal de votre poste:
+Et pour pouvoir se connecter en ssh sans avoir à taper le mot de passe, on peut utiliser un clé publique/privée. Depuis votre bureau, utilisez:
 
 ```shell
 $ ssh-keygen # garder toutes les options par défaut (pas de passphrase) pour simplifier
@@ -115,7 +115,7 @@ $ ssh admin@192.168.56.10
 
 ce dernier ssh ne devrait rien demander. On verra les détails de ce qui se passe en cours de réseau.
 
-C'est assez pratique d'avoir un raccourci plutôt que taper cela à rallonge. Dans le fichier `$HOME/.ssh/config` (créez-le s'il n'existe pas encore), ajoutez les lignes:
+C'est assez pratique d'avoir un raccourci plutôt que taper cela à rallonge. Depuis votre bureau, dans le fichier `$HOME/.ssh/config` (créez-le s'il n'existe pas encore), ajoutez les lignes:
 
 ```
 Host serveur
