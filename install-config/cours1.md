@@ -48,7 +48,9 @@ Aussi appelé "invite de commande", `cmd.exe`, ...
 
 ## Must have
 
-* man ! : RTFM : Commande a connaitre par coeur. Permet d'avoir l'aide de n'importe quelle commande (y compris elle même)
+* *man* : RTFM : Commande a connaitre par coeur. Permet d'avoir l'aide de n'importe quelle commande (y compris elle même)
+
+* cd : change de dossier
 
 * nano, vi, vim, emacs : Différents éditeurs, choose your poison. 
 
@@ -60,7 +62,7 @@ Aussi appelé "invite de commande", `cmd.exe`, ...
 
 * cat : Affiche le contenu d'un fichier
 
-* cp, rm, mv : Manipulation de fichier (copie, remove, move)
+* cp, rm, mv, mkdir, rmdir : Manipulation de fichier (copie, remove, move, make directory, remove directory)
 
 * chmod, chown : Modifications des droits.
 
@@ -146,11 +148,21 @@ dnf search/install/provide/info
 
 * Disques
   * stockent juste des octets
+* table de partitions
+  * découpe les disques en tranches
 * LVM
-  * Abstrait la notion de disque
+  * Abstrait la notion de disque, pour découper en tranches de manière flexible
 * FS
   * Stocke vraiment les fichiers
+  * FAT/vFAT
+    * DOS/Windows au départ, très simple, adopté très largement (e.g. clés USB)
+  * NTFS
+    * Windows
+  * HPFS
+    * MacOS
   * ext2/3/4
+    * au début de Linux, a évolué
   * jfs
-  * XFS
+  * xfs
   * btrfs
+  * ...
