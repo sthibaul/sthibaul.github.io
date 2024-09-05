@@ -617,13 +617,11 @@ Par exemple :
 
 Est équivalent à :
 
+```
 adsillh.local IN    SOA     adsillh.local. root.adsillh.local. (
 ```
 
 et
-
-```
-ns.icann.org IN SOA ns.icann.org. no
 
 ```
 $ORIGIN example.com.
