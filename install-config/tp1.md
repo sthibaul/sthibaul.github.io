@@ -43,14 +43,15 @@ pour vous faire un répertoire sur le disque local, où vous pourrez déposer to
 
 Avant de lancer la VM, il faut configurer ses cartes réseau
 
-* Bouton `Configuration`, partie `Réseau`
-* On laisse la première carte réseau en `NAT` (accès Internet)
-* On active la deuxième carte réseau en `Réseau privé hôte`
-
 * Dans `Fichier`, `Outils`, `Network Manager`
+* Cliquer sur créer
 * Entrer dans les propriétés du réseau `vboxnet0`
 * Désactiver le serveur DHCP (puisqu'on va l'installer nous-même sur le serveur)
 * Appliquer
+
+* Bouton `Configuration`, partie `Réseau`
+* On laisse la première carte réseau en `NAT` (accès Internet)
+* On active la deuxième carte réseau en `Réseau privé hôte`
 
 ## Installation
 
