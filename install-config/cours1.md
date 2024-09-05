@@ -155,6 +155,13 @@ Pour aller encore plus loin:
 
 dnf search/install/provide/info
 
+# Pourquoi des commandes textuelles et des fichiers texte, plutôt que des interfaces graphiques intuitives ?
+
+* Permet d'avoir de nombreuses fonctionalités sans l'effet clickodrome
+* Copier/coller facilement des commandes complexes
+* Automatiser des tâches
+* Automatiser le déploiement de configurations / mises à jour sur de nombreuses machines (e.g. salles de TP du CREMI)
+
 # Début du TP1
 
 # Systèmes de fichiers
