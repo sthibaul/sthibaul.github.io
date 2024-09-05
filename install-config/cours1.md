@@ -5,12 +5,18 @@ Cours1: Installation & Configuration
 
 # Linux ? Unix ?
 
+Historique, origines
+
 - Unix ~70 (e.g. AIX, Solaris, HP-UX)
   - [Unix — Wikipédia](https://fr.wikipedia.org/wiki/Unix)
 - BSD ~80
   - [BSD — Wikipédia](https://fr.wikipedia.org/wiki/Berkeley_Software_Distribution)
 - Linux ~90
   - [Linux — Wikipédia](https://fr.wikipedia.org/wiki/Linux)
+
+De nombreuses distributions Linux, particularités propres
+
+Grandes branches:
 
 - Debian
   - `dpkg`/`apt`
@@ -40,9 +46,15 @@ Démarrage:
 - bureau
 - shell
 
+![](boot.png)
+
 # Le shell
 
 Aussi appelé "invite de commande", `cmd.exe`, ...
+
+Permet de taper des commandes, directement sur la console, via ssh, via un script, automatisé, etc...
+
+Vous approfondirez son usage en cours de shell avec Olivier Delmas
 
 ## Must have
 
@@ -117,6 +129,8 @@ janv. 24 13:20:27 localhost.localdomain sshd[1588]: pam_unix(sshd:session): sess
 
 # Organisation des fichiers
 
++ montrer en live
+
 - `/` : la racine, contient tout le reste
 - `/usr` : logiciels installés
 - `/usr/local` : logiciels installés à la main
@@ -141,14 +155,19 @@ Pour aller encore plus loin:
 
 dnf search/install/provide/info
 
+# Début du TP1
+
 # Systèmes de fichiers
 
 * Disques
   * stockent juste des octets
 * table de partitions
-  * découpe les disques en tranches
+  * découpe les disques en tranches contigues
 * LVM
   * Abstrait la notion de disque, pour découper en tranches de manière flexible
+  * pas forcément contigues
+  * pas forcément sur un seul disque
+  * retaillables à la volée
 * FS
   * Stocke vraiment les fichiers
   * FAT/vFAT
