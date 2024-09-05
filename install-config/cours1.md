@@ -94,8 +94,7 @@ Aussi appelé "invite de commande", `cmd.exe`, ...
 
 * systemctl status/restart/start/stop/enable/list-units
 
-```
-shell
+```shell
 # systemctl status sshd
 * sshd.service - OpenSSH server daemon
    Loaded: loaded (/usr/lib/systemd/system/sshd.service; enabled; vendor preset: enabled)
