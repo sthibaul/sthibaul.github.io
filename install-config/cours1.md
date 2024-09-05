@@ -23,8 +23,6 @@ Cours1: Installation & Configuration
 
 et successeurs (Ubuntu, Kali, Mint, Fedora, ...)
 
-![periodic-table-distro](periodic-table-of-distro.png)
-
 [DistroWatch.com: Put the fun back into computing. Use Linux, BSD.](https://distrowatch.com/dwres.php?resource=family-tree)
 
 # Organisation du système
