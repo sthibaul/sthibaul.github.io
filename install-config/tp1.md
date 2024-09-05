@@ -69,7 +69,9 @@ Il y a plusieurs éléments qu'on doit/veut configurer en particulier:
 
 * Réseau & nom d'hôte
   * La première carte réseau, on peut la connecter simplement, elle est branchée en NAT vers Internet
-  * La deuxième carte réseau, on bascule en mode manuel, et on ajoute l'adresse 192.168.56.10 à la main:
+  * Dans sa configuration, dans l'onglet `Général`, activez la connexion automatique
+  * La deuxième carte réseau, on l'active aussi
+  * Mais dans sa configuration on bascule en mode manuel, et on ajoute l'adresse 192.168.56.10 à la main:
 
   ![config-reseau-serveur](install_alma_srv_network.png)
   
