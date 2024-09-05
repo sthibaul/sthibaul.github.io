@@ -479,7 +479,7 @@ On le verra dans la configuration un peu après, mais dans le cas de la résolut
 On installe le serveur DNS Bind, qui est relativement commun.
 
 ```shell
-# dnf install bind bind-utils
+# dnf install bind-utils bind
 ```
 
 ## Configuration
