@@ -652,7 +652,7 @@ Dans le client, si on essaie de résoudre `alma-server` cela ne fonctionne pas p
 Server:         10.0.2.3
 Address:        10.0.2.3#53
 
-** server can't find alma-server: NXDOMAIN
+** server can't find alma-server: REFUSED
 ```
 
 car il utilise encore le serveur DNS du cremi 10.0.2.3:
