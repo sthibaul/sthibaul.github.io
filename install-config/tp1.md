@@ -182,7 +182,7 @@ Pendant que la VM s'installe, revenez sur la partie installation et configuratio
 
 # Premier exercice: ajouter un disque
 
-* Éteignez votre VM serveur, avec la command `shutdown` ou bien dans le menu Machine, le bouton `Extinction par ACPI`.
+* Éteignez votre VM serveur, avec la command `shutdown now` ou bien dans le menu Machine, le bouton `Extinction par ACPI`.
 
 * Une fois la machine éteinte, on peut ajouter un disque dur:
 
