@@ -415,7 +415,7 @@ enp0s8  aa91c9db-037f-4c4a-97c7-53ecf7d9237d  ethernet  enp0s8
 
 ## Vérifier
 
-On peut vérifier le bon fonctionnement du DHCP en regardant plusieurs fichiers:
+On peut vérifier le bon fonctionnement du DHCP en regardant plusieurs fichiers sur le serveur:
 
 ```shell
 # cat /var/log/messages | grep DHCP
