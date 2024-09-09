@@ -413,6 +413,8 @@ enp0s8  aa91c9db-037f-4c4a-97c7-53ecf7d9237d  ethernet  enp0s8
 # ip a ls dev enp0s8
 ```
 
+Vouz pouvez également utiliser `nmtui` pour gérer plus facilement les interfaces.
+
 ## Vérifier
 
 On peut vérifier le bon fonctionnement du DHCP en regardant plusieurs fichiers sur le serveur:

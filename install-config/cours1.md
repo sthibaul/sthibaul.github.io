@@ -3,6 +3,8 @@ Cours1: Installation & Configuration
 
 [https://dept-info.labri.fr/~thibault/enseignements.html#InstallConfiglpro](https://dept-info.labri.fr/~thibault/enseignements.html#InstallConfiglpro)
 
+Apprenez à taper sans regarder votre clavier.
+
 # Linux ? Unix ?
 
 Historique, origines
@@ -26,6 +28,8 @@ Grandes branches:
   - `yast`
 - Arch
   - `pacman`
+- Linux From Scratch
+  - Pas de gestionnaire de package, tout à la main :)
 
 et successeurs (Ubuntu, Kali, Mint, Fedora, ...)
 
@@ -56,55 +60,66 @@ Permet de taper des commandes, directement sur la console, via ssh, via un scrip
 
 Vous approfondirez son usage en cours de shell avec Olivier Delmas
 
+## Raccourcis clavier essentiels
+
+* `control-alt-t` pour lancer un terminal
+* `tab` pour compléter les noms de fichiers
+* flèche haut puis gauche/droite pour reprendre et corriger une commande précédente
+* `control-r` puis taper un mot pour retrouver une commande dans l'historique
+
 ## Must have
 
-* *man* : RTFM : Commande a connaitre par coeur. Permet d'avoir l'aide de n'importe quelle commande (y compris elle même)
+* *`man`* : RTFM : Commande a connaitre par coeur. Permet d'avoir l'aide de n'importe quelle commande (y compris elle même)
+  * Utiliser `/` pour chercher quelque chose dedans
+  * Utiliser `n` pour trouver la prochaine occurrence de ce que vous avez cherché
 
-* cd : change de dossier
+* `cd` : change de dossier
 
-* nano, vi, vim, emacs : Différents éditeurs, choose your poison. 
+* `nano`, `vi`, `vim`, `emacs` : Différents éditeurs, choose your poison. 
 
-* ls : Liste le contenu d'un dossier.
+* `ls` : Liste le contenu d'un dossier.
 
-* tail, head : Affiche respectivement la fin et le début de fichier. L'option -f de tail permet de continuer à suivre le fichier : tail -f truc.log
+* `tail`, `head` : Affiche respectivement la fin et le début de fichier. L'option -f de tail permet de continuer à suivre le fichier : tail -f truc.log
 
-* dmesg : Afficher des logs kernel
+* `dmesg` : Afficher des logs kernel
 
-* cat : Affiche le contenu d'un fichier
+* `| grep` : Filtre la sortie d'une autre commande
 
-* cp, rm, mv, mkdir, rmdir : Manipulation de fichier (copie, remove, move, make directory, remove directory)
+* `cat` : Affiche le contenu d'un fichier
 
-* chmod, chown : Modifications des droits.
+* `cp`, `rm`, `mv`, `mkdir`, `rmdir` : Manipulation de fichier (copie, remove, move, make directory, remove directory)
 
-* df : Disk File. Lister les filesystem et leur utilisation.
+* `chmod`, `chown` : Modifications des droits.
 
-* ps : Instantané des processus
+* `df` : Disk File. Lister les filesystem et leur utilisation.
 
-* free : Voir rapidement l'utilisation de mémoire
+* `ps` : Instantané des processus
 
-* top : Voir rapidement les conso de cpu/mémoire sous forme de graph
+* `free` : Voir rapidement l'utilisation de mémoire
+
+* `top` : Voir rapidement les conso de cpu/mémoire sous forme de graph
 
 ## Des commandes qui lancent des commandes:
 
-* lsscsi : Liste les périphériques dit "SCSI". Ca concerne le bus lui même, donc les disques durs aussi, pas seulement les vieilles cartes des années 50
+* `lsscsi` : Liste les périphériques dit "SCSI". Ca concerne le bus lui même, donc les disques durs aussi, pas seulement les vieilles cartes des années 50
 
-* nmcli: Permet la configuration réseau. On en parlera plus tard.
+* `nmcli`: Permet la configuration réseau. On en parlera plus tard.
 
-* systemctl : "system control". On en parle un peu après aussi. Permet de "piloter" le système.
+* `systemctl` : "system control". On en parle un peu après aussi. Permet de "piloter" le système.
 
-* uname: Récupère des infos sur l'OS, son kernel, son archi.
+* `uname`: Récupère des infos sur l'OS, son kernel, son archi.
 
-* lscpu : Récupère des infos sur le CPU. On peut aussi les avoir avec un `cat /proc/cpuinfo`
+* `lscpu` : Récupère des infos sur le CPU. On peut aussi les avoir avec un `cat /proc/cpuinfo`
 
 ## Des commandes qui permettent de gérer les soft
 
-* dnf, apt, yast, pacam, pip, etc ... :
+* `dnf`, `apt`, `yast`, `pacam`, `pip`, etc ... :
 
-* make, cmake, configure, etc ... 
+* `make`, `cmake`, `configure`, etc ... 
 
 ## Gérer les démons
 
-* systemctl status/restart/start/stop/enable/list-units
+* `systemctl` `status`/`restart`/`start`/`stop`/`enable`/`list-units`
 
 ```shell
 # systemctl status sshd
@@ -114,7 +129,7 @@ Vous approfondirez son usage en cours de shell avec Olivier Delmas
 ...
 ```
 
-* journactl
+* `journactl`
 
 ```shell
 # journactl -u sshd
@@ -177,6 +192,7 @@ dnf search/install/provide/info
   * retaillables à la volée
 * FS
   * Stocke vraiment les fichiers
+  * Formattage rapide
   * FAT/vFAT
     * DOS/Windows au départ, très simple, adopté très largement (e.g. clés USB)
   * NTFS
