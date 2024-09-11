@@ -182,6 +182,23 @@ update-optimization off;
 
 pour désactiver l'optimisation.
 
+## Attention par contre
+
+Maintenant que la zone est mise à jour dynamiquement, il ne suffit plus d'utiliser
+
+```
+systemctl reload named
+```
+
+après avoir ajouté un nom de domaine: bind indique qu'il ne sait pas faire cela quand la zone est dynamique. Il faut désormais utiliser
+
+```
+systemctl restart named
+```
+
+ce qui implique une courte période pendant laquelle le serveur DNS est
+indisponible. On verra plus loin comment redonder les serveurs DNS.
+
 # Exercice 3: une deuxième VM cliente
 
 Mettons en place une deuxième VM cliente, pour vérifier que tout fonctionne comme prévu !
@@ -211,23 +228,6 @@ Pourquoi est-il vraiment *primordial* de demander à générer une nouvelle adre
 
 Constatez que la première VM client a bien conservé son IP fixe, tandis que la
 deuxième VM client a une IP dynamique.
-
-## Attention par contre
-
-Maintenant que la zone est mise à jour dynamiquement, il ne suffit plus d'utiliser
-
-```
-systemctl reload named
-```
-
-après avoir ajouté un nom de domaine: bind indique qu'il ne sait pas faire cela quand la zone est dynamique. Il faut désormais utiliser
-
-```
-systemctl restart named
-```
-
-ce qui implique une courte période pendant laquelle le serveur DNS est
-indisponible. On verra plus loin comment redonder les serveurs DNS.
 
 # Exercice 4: Redondance DHCP
 
