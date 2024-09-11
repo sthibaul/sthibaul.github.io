@@ -299,7 +299,7 @@ Note: on avait oublié au TP précédent d'activer dns de manière permanente da
 
 Rechargez la configuration du serveur DNS de la première VM serveur. Observez le log `/var/log/messages` sur les deux VMs serveur pendant la re-négociation du bail par la VM client, vous devriez voir la mise à jour DNS se faire !
 
-# Exercice 4: Redondance DNS
+# Exercice 5: Redondance DNS
 
 La même question se pose pour le serveur DNS: s'il tombe ou est simplement en mise à jour, plus personne ne peut résoudre les noms de domaines !
 
