@@ -342,11 +342,11 @@ Il écoute sur le port tcp 67. Le client utilisera le port 68.
 ## Un peu de théorie
 
 Malgré tout, on va voir un peu de théorie sur DHCP: Dynamic Host Configuration Protocol.
-Il permet basiquement d'attribuer une adresse IP à un client. Il simplie la configuration réseau.
+Il permet basiquement d'attribuer une adresse IP à un client. Il simplifie la configuration réseau.
 
 A l'origine, il est un complément du protocole BOOTP (Bootstrap Protocol) qui est utilisé, par exemple, lorsque l'on installe une machine à travers le réseau.
 
-Le serveur écoute sur le port tcp 67. Les clients le contact via une requête en broadcast. L'échange client/serveur est le suivant:
+Le serveur écoute sur le port tcp 67. Les clients le contactent via une requête en broadcast. L'échange client/serveur est le suivant:
 
 * Client : DHCPDISCOVER (Broadcast) : Le client cherche les serveurs DHCP du réseau
 * Serveur : DHCPOFFER : Le serveur répond en donnant les premiers paramètres
@@ -355,11 +355,11 @@ Le serveur écoute sur le port tcp 67. Les clients le contact via une requête e
 * Serveur: DCHPACK : Réponse du serveur avec les paramètres IP
 * Serveur: DHCPNAK : Réponse du serveur indiquant que le bail est échu ou si le client annonce une mauvaise configuration.
 * Client: DHCPRELEASE : Le client libère son adresse
-* Client: DHCPINFORM : Le client demande les paramètre locaux, dans le cas où il à déjà son adresse IP.
+* Client: DHCPINFORM : Le client demande les paramètre locaux, dans le cas où il a déjà son adresse IP.
 
 Dans la majorité des cas, l'échange est en 4 étapes : Discover -> Offer -> Request -> Ack
 
-Un serveur DHCP peut fournir plusieurs option au client, en plus de l'adresse IP. C'est le cas notemment pour le serveur de nom, le serveur kickstart, etc ...
+Un serveur DHCP peut fournir plusieurs option au client, en plus de l'adresse IP. C'est le cas notamment pour le serveur de nom, le serveur kickstart, etc ...
 
 ## Installation
 
@@ -458,21 +458,21 @@ Tout comme le DHCP, un serveur DNS est là pour nous simplifier la vie.
 
 Une IP, c'est pas toujours facile à retenir. Un nom, c'est plus simple.
 
-A l'origine, on utilisait les fichiers "hosts" pour faire le liens entre ip et nom de machine. Et c'est toujours très pratique aujourd'hui.
+A l'origine, on utilisait les fichiers "hosts" pour faire le lien entre ip et nom de machine. Et c'est toujours très pratique aujourd'hui.
 
 Un nom de domaine se décompose. On part de la racine "." et on remonte.
 
 Par exemple, le FQDN (Fully Qualified Domain Name) : fr.wikipedia.org.
 
-.org est un domaine de premier niveau
-wikipedia et un sous domaine, une zone DNS.
-Le domaine .org englobe wikipedia.
+`.org` est un domaine de premier niveau.
+`wikipedia` et un sous domaine, une zone DNS.
+Le domaine `.org` englobe `wikipedia`.
 
-Attention à ne pas confondre zone et domaine. Le domaine wikipedia.org et la zone wikipedia.
+Attention à ne pas confondre zone et domaine. Le domaine `wikipedia.org` et la zone `wikipedia`.
 
-La résolution d'un nom de domaine se fait de manière récursive, de droite à gauche. On résout d'abords le .org, puis le nom wikipedia et enfin le .fr
-Cette résolution est faite par des serveurs dit "récursifs". Généralement vos FAI, mais certaines boites se configurent également des serveurs récursifs.
-Ces serveurs récursifs commencent par intéroger les serveurs dit "racine" au nombre de 9 dans le monde.
+La résolution d'un nom de domaine se fait de manière récursive, de droite à gauche. On résout d'abord le `.org` puis le nom `wikipedia` et enfin le `fr.`
+Cette résolution est faite par des serveurs dit "récursifs". Généralement vos FAI, mais certaines boîtes se configurent également des serveurs récursifs.
+Ces serveurs récursifs commencent par interroger les serveurs dits "racine" au nombre de "13" dans le monde.
 
 On le verra dans la configuration un peu après, mais dans le cas de la résolution d'adresse IP, pour garder la même logique de résolution de droite à gauche, on écrira une adresse IP 192.168.0.12 sous la forme 12.0.168.192.in-addr.arpa.
 
@@ -504,7 +504,7 @@ options {
   [...]
   allow-query { localhost; 192.168.56.0/24; };
   [...]
-  forwarders { 10.0.2.3; }; /* Car le CREMI ne nous laisse pas résoudre nous-même */
+  forwarders { 8.8.8.8; }; /* Car le CREMI ne nous laisse pas complètement résoudre nous-même */
 }
 [...]
 include "/var/named/named.adsillh";
@@ -543,12 +543,14 @@ $TTL 86400      ; 1 day
                                 604800     ; expire (1 week)
                                 38400      ; minimum (10 hours 40 minutes)
                                 )
-                        NS      alma-server.adsillh.local.
 $TTL 3600       ; 1 hour
+@                    NS      alma-server
 alma-server          A       192.168.56.10
 ```
 
-On a ici déclaré que `alma-server.adsillh.local` est à traduire en `192.168.56.10`
+On a ici déclaré que notre nom de domaine `adsillh.local.` est hébergé par
+le serveur DNS `alma-server`, et que `alma-server.adsillh.local` est à traduire
+en `192.168.56.10`
 
 Et la reverse est à créer dans `/var/named/data/db.56.168.192`
 
@@ -562,13 +564,14 @@ $TTL 86400      ; 1 day
                                 604800     ; expire (1 week)
                                 38400      ; minimum (10 hours 40 minutes)
                                 )
-                        NS      alma-server.
-                        A       192.168.56.10
+@                       NS      alma-server.adsillh.local.
 10                      PTR     alma-server.adsillh.local.
 $TTL 3600       ; 1 hour
 ```
 
-On a ici déclaré que `192.168.56.10` est à traduire en `alma-server.adsillh.local`
+On a ici déclaré que la traduction des adresses en `192.168.56.0/24`
+est hébergée par le serveur DNS `alma-server.adsillh.local`, et que
+`192.168.56.10` est à traduire en `alma-server.adsillh.local`
 
 On démarre le serveur
 `systemctl enable --now named`
@@ -693,6 +696,7 @@ Effectivement, sur le serveur il y a par défaut un firewall qui empêche d'acc�
 
 ```shell
 # firewall-cmd --zone=work --change-interface=enp0s8
+# firewall-cmd --zone=work --change-interface=enp0s8 --permanent
 # firewall-cmd --zone=work --add-service=dns
 # firewall-cmd --zone=work --add-service=dns --permanent
 ```

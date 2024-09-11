@@ -1,5 +1,5 @@
-Cours1: Installation & Configuration
-====================================
+Cours 1: Linux, Unix
+====================
 
 [https://dept-info.labri.fr/~thibault/enseignements.html#InstallConfiglpro](https://dept-info.labri.fr/~thibault/enseignements.html#InstallConfiglpro)
 
@@ -50,7 +50,7 @@ Démarrage:
 - bureau
 - shell
 
-![](boot.png)
+![](boot.svg)
 
 # Le shell
 
