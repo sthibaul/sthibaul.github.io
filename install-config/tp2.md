@@ -135,7 +135,7 @@ Cette fois relancer le serveur DHCP devrait fonctionner.
 ## Côté client
 
 Maintenant, il faut que la VM client indique quel nom de machine il souhaite utiliser, en ajoutant à son
-`/etc/sysconfig/network-scripts/enp0s8` la ligne
+`/etc/sysconfig/network-scripts/ifcfg-enp0s8` la ligne
 
 ```
 DHCP_HOSTNAME=alma-client
