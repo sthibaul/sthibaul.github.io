@@ -389,9 +389,10 @@ subnet 192.168.56.0 netmask 255.255.255.0 {
 
 Le serveur va distribuer les adresses `192.168.56.100` à `192.168.56.150`
 
-Il ne reste plus qu'à le lancer:
+Il ne reste plus qu'à l'activer et le lancer:
 
 ```shell
+# systemctl enable dhcpd
 # systemctl start dhcpd
 # systemctl status dhcpd
 ```
