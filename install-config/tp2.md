@@ -64,6 +64,11 @@ machine. Il se trouve que le serveur DHCP peut s'occuper d'effectuer cette mise
 de bail fixe, pour lesquelles on ne pourrait de toutes façons pas enregistrer
 d'IP fixe.
 
+## Faire et défaire, c'est travailler
+
+Pour commencer, mettez en commentaire la configuration DNS manuelle que vous
+venez de faire.
+
 ## Clé RNDC et DNS
 
 Pour cela, on va faire discuter le serveur DHCP avec le serveur DNS. Pour que le
