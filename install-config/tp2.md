@@ -67,7 +67,7 @@ d'IP fixe.
 ## Faire et défaire, c'est travailler
 
 Pour commencer, mettez en commentaire la configuration DNS manuelle que vous
-venez de faire.
+venez de faire (puisqu'elle va se faire automatiquement).
 
 ## Clé RNDC et DNS
 
