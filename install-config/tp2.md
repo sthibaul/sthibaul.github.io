@@ -51,7 +51,7 @@ se connecter facilement en ssh à votre VM client.
 
 ## Configuration DNS
 
-Ajoutez les traductions DNS pour votre VM, du nom de domaine vers l'adresse IP
+Ajoutez les traductions DNS pour votre VM client, du nom de domaine vers l'adresse IP
 et inversement. Rechargez la configuration DNS et vérifiez que c'est effectif.
 
 Avez-vous pensé à mettre à jour le `serial` ?
