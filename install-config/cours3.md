@@ -91,7 +91,7 @@ Problème: rien dans SMTP n'empêche d'envoyer un mail avec n'importe quel `From
 
 On ajoute un enregistrement DNS, par exemple:
 
-```
+```zone
 labri.fr.		TXT	"v=spf1 ip4:147.210.0.0/16 ip6:2001:660:6101::/48 ~all"
 ```
 

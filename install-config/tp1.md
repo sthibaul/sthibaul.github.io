@@ -253,7 +253,7 @@ Pour les recharger
 
 * Rallumez la VM, on peut voir le nouveau disque avec
 
-```
+```shell
 # fdisk -l
 Disque /dev/sdb : 20 GiB, 21474836480 octets, 41943040 secteurs
 Unités : secteur de 1 × 512 = 512 octets
@@ -534,7 +534,7 @@ On peut maintenant créer nos zones. Il en existe deux, la forward et la reverse
 
 La forward est à créer dans `/var/named/data/db.adsillh.local`
 
-```shell
+```zone
 ; date file for zone adsillh.local
 $TTL 86400      ; 1 day
 @           IN SOA  adsillh.local. root.adsillh.local. (
@@ -555,7 +555,7 @@ en `192.168.56.10`
 
 Et la reverse est à créer dans `/var/named/data/db.56.168.192`
 
-```shell
+```zone
 ; date file for zone adsillh.local
 $TTL 86400      ; 1 day
 @ IN SOA  adsillh.local. root.adsillh.local. (
@@ -617,26 +617,26 @@ Et un peu plus d'infos sur les @ORIGIN et @ : https://bind9.readthedocs.io/en/v9
 
 Par exemple :
 
-```
+```zone
 @   IN  SOA     adsillh.local. root.adsillh.local. (
 ```
 
 Est équivalent à :
 
-```
+```zone
 adsillh.local IN    SOA     adsillh.local. root.adsillh.local. (
 ```
 
 et
 
-```
+```zone
 $ORIGIN example.com.
 WWW     CNAME   MAIN-SERVER
 ```
 
 Est équivalent à
 
-```
+```zone
 WWW.EXAMPLE.COM. CNAME MAIN-SERVER.EXAMPLE.COM.
 ```
 
@@ -645,7 +645,7 @@ WWW.EXAMPLE.COM. CNAME MAIN-SERVER.EXAMPLE.COM.
 Pour que nos client DHCP sachent qu'on a un serveur DNS à interroger, il faut leur dire dans les baux.
 On avait mis ces 2 lignes pour cela dans notre déclaration de subnet:
 
-```shell
+```
         option domain-name "adsillh.local";
         option domain-name-servers 192.168.56.10;
 ```

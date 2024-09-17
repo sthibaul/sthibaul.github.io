@@ -61,12 +61,7 @@ Conséquence: pour notre domaine `adsillh.local.`, on est responsable de résoud
 
 D'où notre fichier de zone `adsillh.local`:
 
-```
-
-
-
-
-
+```zone
 ; date file for zone adsillh.local
 $TTL 86400      ; 1 day
 @           IN SOA  adsillh.local. root.adsillh.local. (
@@ -87,19 +82,27 @@ Après le SOA, une ligne = un enregistrement (record)
 
 * Une traduction nom de domaine -> IPv4
 
-```alma-server          A       192.168.56.10```
+```zone
+alma-server          A       192.168.56.10
+```
 
 * Une traduction nom de domaine -> IPv6
 
-```alma-server          AAAA       fec0::1```
+```zone
+alma-server          AAAA       fec0::1
+```
 
 * Un alias (appelé Canonical Name)
 
-```myserver             CNAME       alma-server```
+```zone
+myserver             CNAME       alma-server
+```
 
 * L'adresse d'un serveur de mail pour le domaine
 
-```@                    MX          10 alma-server```
+```zone
+@                    MX          10 alma-server
+```
 
 Nota:
 
@@ -114,27 +117,35 @@ Il y a des tas d'autres types d'enregistrements:
 
 * La position géographique
 
-```alma-server          LOC         44 52 N 0 33 W 20m```
+```zone
+alma-server          LOC         44 52 N 0 33 W 20m
+```
 
 * Le serveur DNS pour un sous-domaine
 
-```perso                NS          ns.perso```
+```zone
+perso                NS          ns.perso
+```
 
 * Le type SPF pour la validation des mails (on en reparle plus tard)
 
-```@                    SPF         "v=spf1 a -all"```
+```zone
+@                    SPF         "v=spf1 a -all"
+```
 
 Au fait, je vous ai parlé du champ `serial` ?
 
 * Le type TXT, complètement fourre-tout.
 
-```@                    TXT         "printer=lpr5"```
+```zone
+@                    TXT         "printer=lpr5"
+```
 
 Tous les admins ont un jour oublié de mettre à jour le champ `serial`.
 
 ## Un exemple
 
-```
+```zone
 @                    NS      alma-server
 @                    MX  10  alma-server2
 alma-server          A       192.168.56.10
@@ -158,7 +169,7 @@ On fait aussi la résolution de droite à gauche (du plus général au plus spé
 
 Dans notre cas en TP on a configuré une zone `56.168.192.in-addr.arpa.`, et l'on a mis les enregistrements
 
-```
+```zone
 $TTL 86400      ; 1 day
 @       IN SOA  adsillh.local. root.adsillh.local. (
                                 14         ; serial

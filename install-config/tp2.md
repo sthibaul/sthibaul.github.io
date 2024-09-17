@@ -75,8 +75,8 @@ Pour cela, on va faire discuter le serveur DHCP avec le serveur DNS. Pour que le
 serveur DNS ait confiance en le serveur DHCP, on va utiliser une clé RNDC. Il
 faut commencer par la générer:
 
-```
-rndc-confgen -a
+```shell
+# rndc-confgen -a
 ```
 
 Il nous dit qu'il a créé `/etc/rndc.key`. Vous pouvez regarder à quoi
@@ -131,8 +131,8 @@ Si l'on relance le serveur DHCP l'inclusion de `rndc.key` échoue... En effet,
 SELinux nous embête, il faut apparemment permettre au serveur DHCP d'utiliser
 mmap (bug dans AlmaLinux):
 
-```
-setsebool -P domain_can_mmap_files 1
+```shell
+# setsebool -P domain_can_mmap_files 1
 ```
 
 Cette fois relancer le serveur DHCP devrait fonctionner.
@@ -148,14 +148,14 @@ DHCP_HOSTNAME=alma-client
 
 Il faut recharger cette configuration
 
-```
-nmcli con reload enp0s8
+```shell
+# nmcli con reload enp0s8
 ```
 
 Et re-négocier le bail DHCP
 
-```
-nmcli con down enp0s8 ; nmcli con up enp0s8
+```shell
+# nmcli con down enp0s8 ; nmcli con up enp0s8
 ```
 
 On peut alors voir côté serveur dans `systemctl status named` que la zone a été mise à jour:
@@ -168,13 +168,13 @@ adding an RR at '20.56.168.192.in-addr.arpa' PTR alma-client.adsillh.local.
 
 On peut aussi suivre en direct les mises à jour avec 
 
-```
-tail -F /var/log/messages
+```shell
+# tail -F /var/log/messages
 ```
 
 Et l'on peut vérifier:
 
-```
+```shell
 # nslookup alma-client.adsillh.local localhost
 # nslookup 192.168.56.20 localhost
 ```
@@ -191,14 +191,14 @@ pour désactiver l'optimisation.
 
 Maintenant que la zone est mise à jour dynamiquement, il ne suffit plus d'utiliser
 
-```
-systemctl reload named
+```shell
+# systemctl reload named
 ```
 
 après avoir ajouté un nom de domaine: bind indique qu'il ne sait pas faire cela quand la zone est dynamique. Il faut désormais utiliser
 
-```
-systemctl restart named
+```shell
+# systemctl restart named
 ```
 
 ce qui implique une courte période pendant laquelle le serveur DNS est
@@ -212,8 +212,8 @@ Pour s'éviter de réinstaller une VM, on peut simplement cloner notre VM client
 
 * Si elle n'a pas de nom bien explicite, on commencer par donner à notre première VM cliente un nom explicite:
 
-```
-hostnamectl set-hostname alma-client.adsillh.local
+```shell
+# hostnamectl set-hostname alma-client.adsillh.local
 ```
 
 * Puis on l'éteint avec `poweroff`
