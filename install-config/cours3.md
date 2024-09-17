@@ -1,4 +1,4 @@
-Cours 2: Mail
+Cours 3: Mail
 =============
 
 # DNS
