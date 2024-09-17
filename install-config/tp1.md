@@ -696,10 +696,9 @@ Heu, cela ne fonctionne pas ?!
 Effectivement, sur le serveur il y a par défaut un firewall qui empêche d'accéder aux services à moins qu'on l'ouvre explicitement. Sur le serveur il faut donc ouvrir:
 
 ```shell
-# firewall-cmd --zone=work --change-interface=enp0s8
 # firewall-cmd --zone=work --change-interface=enp0s8 --permanent
-# firewall-cmd --zone=work --add-service=dns
 # firewall-cmd --zone=work --add-service=dns --permanent
+# firewall-cmd --reload
 ```
 
 On a indiqué que l'interface réseau `enp0s8` fait partie du réseau de travail, et qu'il faut ouvrir le service `dns` dessus. Et on demande que ce soit permanent même après reboot.

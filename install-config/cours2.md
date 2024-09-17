@@ -136,7 +136,7 @@ Tous les admins ont un jour oublié de mettre à jour le champ `serial`.
 
 ```
 @                    NS      alma-server
-@                    MX      10 alma-server2
+@                    MX  10  alma-server2
 alma-server          A       192.168.56.10
 alma-server          AAAA    fec0::10
 alma-server2         A       192.168.56.11
