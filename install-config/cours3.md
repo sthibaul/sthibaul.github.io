@@ -5,7 +5,7 @@ Cours 3: Mail
 
 Enregistrement MX, typiquement
 
-```
+```dns zone
 @                   MX      10 monserveur1
 @                   MX      10 monserveur2
 @                   MX      20 monserveur-fallback
