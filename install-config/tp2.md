@@ -204,7 +204,7 @@ après avoir ajouté un nom de domaine: bind indique qu'il ne sait pas faire cel
 ce qui implique une courte période pendant laquelle le serveur DNS est
 indisponible. On verra plus loin comment redonder les serveurs DNS.
 
-# Exercice 3: une deuxième VM cliente
+# Exercice 3 (bonus): une deuxième VM cliente
 
 Mettons en place une deuxième VM cliente, pour vérifier que tout fonctionne comme prévu !
 
@@ -234,7 +234,7 @@ Pourquoi est-il vraiment *primordial* de demander à générer une nouvelle adre
 Constatez que la première VM client a bien conservé son IP fixe, tandis que la
 deuxième VM client a une IP dynamique.
 
-# Exercice 4: Redondance DHCP
+# Exercice 4 (bonus): Redondance DHCP
 
 Si le serveur DHCP est indisponible (parce que la machine est tombée en panne,
 ou simplement parce qu'on est en train de la mettre à jour), les machines ne
@@ -304,7 +304,7 @@ Note: on avait oublié au TP précédent d'activer dns de manière permanente da
 
 Rechargez la configuration du serveur DNS de la première VM serveur. Observez le log `/var/log/messages` sur les deux VMs serveur pendant la re-négociation du bail par la VM client, vous devriez voir la mise à jour DNS se faire !
 
-# Exercice 5: Redondance DNS
+# Exercice 5 (bonus): Redondance DNS
 
 La même question se pose pour le serveur DNS: s'il tombe ou est simplement en mise à jour, plus personne ne peut résoudre les noms de domaines !
 

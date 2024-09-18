@@ -43,7 +43,7 @@ l'installation.
 
 En théorie on dirait à son PC d'envoyer ses mails au reste du monde en SMTP.
 
-Mais on préfère utiliser le smarthost de notre FAI:
+Mais on préfère utiliser le smarthost de notre FAI (équivalent du facteur de la poste):
 
 * Pour qu'il s'occupe de réessayer d'envoyer les mails si le serveur SMTP cible est temporairement en panne.
 * Parce que notre FAI ne nous laisse pas nous connecter aux ports 25 du reste du monde (empêcher d'émettre du spam)
@@ -52,7 +52,7 @@ Et donc configurer son PC pour utiliser le SMTP de son FAI (toujours sur le port
 
 E.g. `smtp.emi.u-bordeaux.fr`
 
-En théorie, le nom du serveur SMTP utilisable est fourni via DHCP. En pratique
+En théorie, le nom du smarthost SMTP utilisable est fourni via DHCP. En pratique
 c'est rarement configuré pour.
 
 ## SUBMISSION

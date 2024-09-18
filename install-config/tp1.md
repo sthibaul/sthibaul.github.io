@@ -240,7 +240,7 @@ Si vous changez quelque chose dans ces fichiers, il faut utiliser
 
 Pour les recharger
 
-# Premier exercice: ajouter un disque dur
+# Exercice 1: ajouter un disque dur
 
 ## Ajout du disque dur
 
@@ -331,7 +331,7 @@ Dans le groupe de volume, on a deux volumes logiques `root` (pour `/`) et `swap`
 
 * Et vous pouvez rajouter encore à chaud 4G à `data`
 
-# Deuxième exercice: ajouter un serveur DHCP
+# Exercice 2: ajouter un serveur DHCP
 
 Un serveur DHCP a pour rôle principal de fournir une adresse IP aux client qui démarrent sur son réseau.
 
@@ -447,7 +447,7 @@ lease 192.168.56.104 {
 }
 ```
 
-# Troisième exercice: ajouter un serveur DNS
+# Exercice 3: ajouter un serveur DNS
 
 Installer un serveur DNS va demander plus de boulot qu'un DHCP. Les 2 vont cependant travailler ensemble. DHCP fournissant aux client les information de connexion pour contacter le serveur DNS.
 
