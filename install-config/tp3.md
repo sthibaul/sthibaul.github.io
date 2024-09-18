@@ -430,3 +430,61 @@ set smtp_url = "smtp://admin@smtp.adsillh.local:587"
 ```
 
 Réessayer d'envoyer un mail, il vous demandera juste le mot de passe pour s'authentifier.
+
+## À la main !
+
+On pourrait vouloir tester avec `telnet`, mais le chiffrement à la main, c'est dur :)
+
+Sur la VM client, installez le package `gnutls-utils`
+
+Vous pouvez alors vous connecter sur le port 587 ainsi:
+
+```shell
+$ gnutls-cli --no-ca-verification --starttls-proto=smtp --port 587 192.168.56.10
+```
+
+Il s'occupe de voir le début de la négociation SMTP et d'utiliser STARTTLS et
+négocier les clés. On désactive ici la vérification du CA, on en reparlera
+plus tard en réseau.
+
+On peut s'authentifier, mais il faut se préparer un peu: il faut encode en base64 login et mot de passe:
+
+```shell
+$ echo -n admin | base64
+YWRtaW4=
+$ echo -n toto | base64
+dG90bw==
+```
+
+On peut alors discuter avec le serveur:
+
+```
+ehlo myname
+250-alma-server.adsillh.local
+250-PIPELINING
+250-SIZE 10240000
+250-VRFY
+250-ETRN
+250-AUTH PLAIN LOGIN
+250-ENHANCEDSTATUSCODES
+250-8BITMIME
+250-DSN
+250 SMTPUTF8
+auth login
+334 VXNlcm5hbWU6
+YWRtaW4=
+334 UGFzc3dvcmQ6
+dG90bw==
+235 2.7.0 Authentication successful
+```
+
+Et la suite est du smtp habituel.
+
+Si vous vous posiez la question de ce qu'il baragouine avec 334, c'est simplement encodé en base64:
+
+```
+$ echo VXNlcm5hbWU6 | base64 -d
+Username:
+$ echo UGFzc3dvcmQ6 | base64 -d
+Password:
+```
