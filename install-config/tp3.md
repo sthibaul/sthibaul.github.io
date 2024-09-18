@@ -95,7 +95,8 @@ mails (143 et 110):
 ```
 
 mais surtout pas sur la zone `public`: ne jamais laisser les employés de
-l'entreprise se connecter au serveur de mail sans chiffrement !
+l'entreprise se connecter au serveur de mail depuis n'importe où sur Internet
+sans chiffrement !
 
 Enfin on applique les règles du firewall que l'on vient d'enregistrer:
 
@@ -133,10 +134,14 @@ Retrouvez les lignes `mydestination`, pour activer celle qui inclut `$mydomain`
 Retrouvez les lignes `inet_interfaces`, pour activer celle qui utilise `all`,
 pour que le serveur écoute vers l'extérieur.
 
-Retrouvez les lignes `mynetworks`, définissez-le à `192.168.56.0/24,
-127.0.0.0/8, [::1]/128` pour que le serveur fasse confiance aux machines
-de notre réseau, pour qu'elles puissent envoyer du mail sans avoir à
-s'authentifier.
+Retrouvez les lignes `mynetworks`, définissez-le à
+
+```
+192.168.56.0/24, 127.0.0.0/8, [::1]/128
+```
+
+pour que le serveur fasse confiance aux machines de notre réseau, pour qu'elles
+puissent envoyer du mail sans avoir à s'authentifier.
 
 Retrouvez les lignes `home_mailbox`, pour activer celle qui utilise `Maildir/`, pour
 définir où déposer les mails reçus. 
@@ -165,7 +170,7 @@ Il faut mettre à jour le fichier `/etc/postfix/virtual.db` qui est juste à cô
 ## Premiers tests
 
 On peut commencer à tester notre serveur. Ci-dessous, les lignes commençant
-par `2xx` sont des réponses du serveur, il ne faut pas les taper. Le point est
+par `2xx` sont des réponses du serveur, il ne faut pas les taper. Le `.` est
 bel est bien à taper tout seul sur sa ligne.
 
 ```shell
@@ -224,7 +229,7 @@ depuis une autre machine et avec un client mail plus évolué.
 
 Réessayez d'envoyer un mail, cette fois vers votre adresse `@etu.u-bordeaux.fr`. Cela devrait fonctionner.
 
-Essayez vers une adresse qui n'est pas en `u-bordeaux.fr` (mais en utilisant dans from votre adresse `u-bordeaux.fr`).
+Essayez vers une adresse qui n'est pas en `u-bordeaux.fr` (mais en utilisant dans `From` votre adresse `u-bordeaux.fr`).
 
 Cela ne fonctionne pas, vous ne recevez rien ! Vérifiez la file des mails en
 attente avec
@@ -245,7 +250,7 @@ Retrouvez les lignes `relayhost`, et indiquez-y `smtp.u-bordeaux.fr`
 
 Redémarrez postfix, constatez que le mail est bien parti.
 
-Regardez à la fin de `/var/log/maillog` pour avoir le détail de ce qui s'est passé: il est passé par le smarthost. Il est très utile pour pouvoir débugguer !
+Regardez à la fin de `/var/log/maillog` pour avoir le détail de ce qui s'est passé: il est passé par le smarthost. Ce log est très utile pour pouvoir débugguer !
 
 
 # Exercice 3: IMAP/POP3 avec Dovecot
@@ -302,7 +307,7 @@ Avec `dele` on supprime un mail.
 
 Vous pouvez voir que le mail a effectivement disparu de `Maildir`
 
-On pourrait faire de même en IMAP, qui permet aussi de changer de dossier.
+On pourrait faire de même en IMAP, qui permet aussi de changer de dossier. Le protocole est un peu plus compliqué, on ne le fera pas en TP.
 
 # Exercice 4 (bonus) : un vrai client mail
 
@@ -316,7 +321,7 @@ Repassez en tant que simple `admin`, et créez le fichier `.muttrc` expliquant
 set from = "admin@adsillh.local"
 
 # Nom complet de l'expéditeur
-set realname = "Moi-même"
+set realname = "Jeannot Lapin"
 
 # Comment éditer les mails
 set editor = "nano"
@@ -328,9 +333,6 @@ set folder="imaps://imap.adsillh.local/INBOX"
 
 # On envoie les mails via notre serveur aussi
 set smtp_url = "smtp://smtp.adsillh.local:25"
-
-# Activer le chiffrement autant que possible
-set ssl_starttls = yes
 ```
 
 ## Lecture de mails
@@ -347,7 +349,7 @@ plus (parce que supprimé précédemment), renvoyez-en un de nouveau, et tapez
 
 Tapez `m`
 
-Il vous demande l'adresse destination, indiquez `admin@adsillh.local`, le
+Il vous demande l'adresse destination, indiquez `admin@adsillh.local` . Le
 sujet importe peu. Tapez un peu de blabla dans nano et quittez-le. Mutt vous
 redonne le détail, tapez `y` pour valider l'envoi. Tapez `c!` `entrée` pour
 rafraîchir, le mail est arrivé !
@@ -362,7 +364,7 @@ Vous pouvez aussi essayer de configurer thunderbird dans votre session Cremi.
 
 Quand mutt a envoyé son mail, il a pu le faire car il est sur le réseau du serveur de mail, qu'on avait indiqué dans `mynetworks`. Quand vous utilisez thunderbird depuis votre session Cremi, c'est encore le cas (il utilise la adresse `192.158.56.1`).
 
-Mais si vous êtes complètement ailleurs dans le monde, il vous faut utiliser
+Mais si vous êtes complètement ailleurs sur Internet, il vous faut utiliser
 le port 587 et vous authentifier auprès de votre serveur de mail.
 
 Pour se connecter en pop3/imap, on a utilisé notre login/password unix `admin`,
@@ -387,7 +389,7 @@ submission inet n       -       n       -       -       smtpd
   -o milter_macro_daemon_name=ORIGINATING
 ```
 
-et on avait déjà ouvert le port dans le firewall
+et l'on avait déjà ouvert le port dans le firewall
 
 ## Configurer l'authentification
 
@@ -429,7 +431,7 @@ et corriger l'url dans `.muttrc` pour utiliser le port 587 et indiquer l'utilisa
 set smtp_url = "smtp://admin@smtp.adsillh.local:587"
 ```
 
-Réessayer d'envoyer un mail, il vous demandera juste le mot de passe pour s'authentifier.
+Réessayez d'envoyer un mail, il vous demandera juste le mot de passe pour s'authentifier.
 
 ## À la main !
 
@@ -480,7 +482,7 @@ dG90bw==
 
 Et la suite est du smtp habituel.
 
-Si vous vous posiez la question de ce qu'il baragouine avec 334, c'est simplement encodé en base64:
+Si vous vous posiez la question de ce qu'il baragouine après `334`, c'est simplement encodé en base64:
 
 ```
 $ echo VXNlcm5hbWU6 | base64 -d
