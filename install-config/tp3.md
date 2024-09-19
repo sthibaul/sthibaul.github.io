@@ -137,7 +137,7 @@ Dans la configuration, le mail ne fonctionne qu'à l'intérieur de notre
 serveur. Il faut dire au serveur de s'ouvrir vers l'extérieur, dans
 le fichier `/etc/postfix/main.cf`.
 
-Retrouvez les lignes `mydestination`, pour activer celle qui inclut `$mydomain`
+Retrouvez les lignes `mydestination`, pour activer celle (et seulement celle) qui inclut `$mydomain`
 (ici, `$mydomain` sera remplacé automatiquement par `adsillh.local`)
 
 Retrouvez les lignes `inet_interfaces`, pour activer celle qui utilise `all`,
