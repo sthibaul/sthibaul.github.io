@@ -240,98 +240,7 @@ Si vous changez quelque chose dans ces fichiers, il faut utiliser
 
 Pour les recharger
 
-# Exercice 1: ajouter un disque dur
-
-## Ajout du disque dur
-
-* Éteignez votre VM serveur, avec la command `shutdown now` ou bien dans le menu Machine, le bouton `Extinction par ACPI`.
-
-* Une fois la machine éteinte, on peut ajouter un disque dur:
-
-  * dans la configuration, dans le Stockage, dans la partie Contrôleur SATA, utiliser le bouton pour ajouter un périphérique Disque Dur.
-  * Créez un disque VDI, sans préallocation, il vous propose de le stocker aussi dans `/local`, c'est très bien.
-
-* Rallumez la VM, on peut voir le nouveau disque avec
-
-```shell
-# fdisk -l
-Disque /dev/sdb : 20 GiB, 21474836480 octets, 41943040 secteurs
-Unités : secteur de 1 × 512 = 512 octets
-Taille de secteur (logique / physique) : 512 octets / 512 octets
-taille d'E/S (minimale / optimale) : 512 octets / 512 octets
-
-
-Disque /dev/sda : 20 GiB, 21474836480 octets, 41943040 secteurs
-Unités : secteur de 1 × 512 = 512 octets
-Taille de secteur (logique / physique) : 512 octets / 512 octets
-taille d'E/S (minimale / optimale) : 512 octets / 512 octets
-```
-
-mais il n'y a encore rien dessus.
-
-## En profiter
-
-* Ce qui serait chouette, c'est qu'on puisse l'utiliser en plus du premier disque de manière transparente, il se trouve que c'est ce que l'on peut faire avec LVM ! On peut regarder l'état actuel du LVM:
-
-```shell
-# pvs
-  PV         VG        Fmt  Attr PSize   PFree
-  /dev/sda2  almalinux lvm2 a--  <19,00g    0
-```
-
-On a un seul volume physique (PV), `sda2`, dans lequel on a un groupe de volume (VG) `almalinux`.
-
-```shell
-# lvs
-  LV   VG        Attr       LSize   Pool Origin Data%  Meta%  Move Log Cpy%Sync Convert
-  root almalinux -wi-ao---- <17,00g
-  swap almalinux -wi-ao----   2,00g
-```
-
-Dans le groupe de volume, on a deux volumes logiques `root` (pour `/`) et `swap` (pour avoir du rab quand la VM manque de mémoire).
-
-* On peut ajouter un volume physique sur `sdb`:
-
-```shell
-# pvcreate /dev/sdb
-# pvs
-```
-
-* Puis l'ajouter au groupe de volume:
-
-```shell
-# vgextend almalinux /dev/sdb
-# pvs
-```
-
-* Et on peut maintenant ajouter de la place sur notre `/`, par exemple:
-
-```shell
-# lvextend -L +10G /dev/almalinux/root
-# lvs
-```
-
-* Mais pourtant `df -h /` ne montre toujours que 17Go de place ?! Effectivement, il faut encore retailler le système de fichiers:
-
-```shell
-# df -h /
-# xfs_growfs  /dev/almalinux/root
-# df -h /
-```
-
-* On peut aussi vouloir créer une partition `data` à part:
-
-```shell
-# lvcreate -L 5G -n data almalinux
-# mkfs.xfs /dev/almalinux/data
-# mkdir /data
-# mount /dev/almalinux/data /data
-# df -h /data
-```
-
-* Et vous pouvez rajouter encore à chaud 4G à `data`
-
-# Exercice 2: ajouter un serveur DHCP
+# Exercice 1: ajouter un serveur DHCP
 
 Un serveur DHCP a pour rôle principal de fournir une adresse IP aux client qui démarrent sur son réseau.
 
@@ -447,7 +356,7 @@ lease 192.168.56.104 {
 }
 ```
 
-# Exercice 3: ajouter un serveur DNS
+# Exercice 2: ajouter un serveur DNS
 
 Installer un serveur DNS va demander plus de boulot qu'un DHCP. Les 2 vont cependant travailler ensemble. DHCP fournissant aux client les information de connexion pour contacter le serveur DNS.
 
@@ -723,3 +632,95 @@ Address: 209.51.188.116
 Name:   www.gnu.org
 Address: 2001:470:142:5::116
 ```
+
+# Exercice 3 (bonus): ajouter un disque dur
+
+## Ajout du disque dur
+
+* Éteignez votre VM serveur, avec la command `shutdown now` ou bien dans le menu Machine, le bouton `Extinction par ACPI`.
+
+* Une fois la machine éteinte, on peut ajouter un disque dur:
+
+  * dans la configuration, dans le Stockage, dans la partie Contrôleur SATA, utiliser le bouton pour ajouter un périphérique Disque Dur.
+  * Créez un disque VDI, sans préallocation, il vous propose de le stocker aussi dans `/local`, c'est très bien.
+
+* Rallumez la VM, on peut voir le nouveau disque avec
+
+```shell
+# fdisk -l
+Disque /dev/sdb : 20 GiB, 21474836480 octets, 41943040 secteurs
+Unités : secteur de 1 × 512 = 512 octets
+Taille de secteur (logique / physique) : 512 octets / 512 octets
+taille d'E/S (minimale / optimale) : 512 octets / 512 octets
+
+
+Disque /dev/sda : 20 GiB, 21474836480 octets, 41943040 secteurs
+Unités : secteur de 1 × 512 = 512 octets
+Taille de secteur (logique / physique) : 512 octets / 512 octets
+taille d'E/S (minimale / optimale) : 512 octets / 512 octets
+```
+
+mais il n'y a encore rien dessus.
+
+## En profiter
+
+* Ce qui serait chouette, c'est qu'on puisse l'utiliser en plus du premier disque de manière transparente, il se trouve que c'est ce que l'on peut faire avec LVM ! On peut regarder l'état actuel du LVM:
+
+```shell
+# pvs
+  PV         VG        Fmt  Attr PSize   PFree
+  /dev/sda2  almalinux lvm2 a--  <19,00g    0
+```
+
+On a un seul volume physique (PV), `sda2`, dans lequel on a un groupe de volume (VG) `almalinux`.
+
+```shell
+# lvs
+  LV   VG        Attr       LSize   Pool Origin Data%  Meta%  Move Log Cpy%Sync Convert
+  root almalinux -wi-ao---- <17,00g
+  swap almalinux -wi-ao----   2,00g
+```
+
+Dans le groupe de volume, on a deux volumes logiques `root` (pour `/`) et `swap` (pour avoir du rab quand la VM manque de mémoire).
+
+* On peut ajouter un volume physique sur `sdb`:
+
+```shell
+# pvcreate /dev/sdb
+# pvs
+```
+
+* Puis l'ajouter au groupe de volume:
+
+```shell
+# vgextend almalinux /dev/sdb
+# pvs
+```
+
+* Et on peut maintenant ajouter de la place sur notre `/`, par exemple:
+
+```shell
+# lvextend -L +10G /dev/almalinux/root
+# lvs
+```
+
+* Mais pourtant `df -h /` ne montre toujours que 17Go de place ?! Effectivement, il faut encore retailler le système de fichiers:
+
+```shell
+# df -h /
+# xfs_growfs  /dev/almalinux/root
+# df -h /
+```
+
+* On peut aussi vouloir créer une partition `data` à part:
+
+```shell
+# lvcreate -L 5G -n data almalinux
+# mkfs.xfs /dev/almalinux/data
+# mkdir /data
+# mount /dev/almalinux/data /data
+# df -h /data
+```
+
+* Et vous pouvez rajouter encore à chaud 4G à `data`
+
