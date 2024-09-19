@@ -52,9 +52,16 @@ Augmentez le serial, redémarrez named.
 
 Vérifiez que vous arrivez effectivement à résoudre les noms:
 
+```shell
+# dig imap.adsillh.local @192.168.56.10
+# dig txt adsillh.local @192.168.56.10
 ```
-dig imap.adsillh.local @192.168.56.10
-dig txt adsillh.local @192.168.56.10
+
+Si cela échoue, essayez d'enlever les fichiers de journal de named, ils nous embêtent apparemment:
+
+```shell
+# rm -f /var/named/data/*.jnl
+# systemctl restart named
 ```
 
 ## Firewall
@@ -350,7 +357,17 @@ set smtp_url = "smtp://smtp.adsillh.local:25"
 
 ## Lecture de mails
 
-Lancez `mutt`. Il vous dit qu'il ne connait pas le certificat de votre
+Lancez `mutt`.
+
+S'il n'arrive pas à résoudre `imap.u-bordeaux.fr`, vérifiez déjà que vous arrivez à le résoudre depuis le serveur.
+Éventuellement, essayez d'enlever les fichiers de journal de named, ils nous embêtent apparemment:
+
+```shell
+# rm -f /var/named/data/*.jnl
+# systemctl restart named
+```
+
+Mutt nous dit qu'il ne connait pas le certificat de votre
 serveur. On applique le principe `TOFU` (Trust On First Use, on en reparlera en
 cours de réseau) en acceptant toujours.
 
