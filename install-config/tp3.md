@@ -36,10 +36,19 @@ connecter au serveur `alma-srv` (donc `alma-srv.adsillh.local`).
 On déclare également des alias pour les serveurs que nos utilisateurs vont utiliser:
 
 ```zone
-smtp    CNAME     alma-srv
-imap    CNAME     alma-srv
-pop3    CNAME     alma-srv
+smtp    CNAME   alma-srv
+imap    CNAME   alma-srv
+pop3    CNAME   alma-srv
 ```
+
+Enfin, on peut ajouter un enregistrement SPF pour déclarer quelles IPs sont
+cencées émettre les mails venant de `@adsillh.local`:
+
+```zone
+@       TXT     "v=spf1 ip4:192.168.56.0/24 ~all"
+```
+
+Augmentez le serial, redémarrez named.
 
 ## Firewall
 
