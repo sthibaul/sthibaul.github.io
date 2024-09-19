@@ -225,10 +225,10 @@ On peut vérifier qu'`admin` a effectivement reçu le mail:
 # cat /home/admin/Maildir/new/1726531029.Vfd00I109a01eM984214.alma-server.adsillh.local
 ```
 
-Vous pouvez lire ce mail en mode un peu hack3rs. Installez le package `mailx`. Vous pouvez alors utiliser
+Vous pouvez lire ce mail en mode un peu hack3rs. Installez le package `mailx`. Vous pouvez alors utiliser en tant qu'`admin`:
 
 ```shell
-# mail -f Maildir
+$ mail -f Maildir
 ```
 
 Dans l'exercice suivant on met en place IMAP/POP3 pour pouvoir lire les mails
