@@ -23,6 +23,7 @@ Indication de priorité pour ne pas solliciter le fallback en temps normal.
 Port 25, envoi normal de mail.
 
 Pour un mail à destination de `machin@truc.bidule`
+
 * On demande à DNS l'enregistrement MX pour `truc.bidule.`
 * On se connecte sur le port 25 de l'IP retournée
 * On pousse le mail
@@ -81,13 +82,13 @@ pop3s (995) et imaps (993), connexion entièrement chiffrée. Le serveur a besoi
 C'est une simple sur-couche web ! Derrière, se connecte en imap au serveur de
 mail
 
-# SPF, DMARC
+# SPF, DKIM, DMARC
 
 Toujours pour empêcher les spams... On veut vérifier le `From` des mails.
 
 Problème: rien dans SMTP n'empêche d'envoyer un mail avec n'importe quel `From`.
 
-## SPF
+## SPF (Sender Policy Framework)
 
 On ajoute un enregistrement DNS, par exemple:
 
@@ -110,7 +111,7 @@ Mais cela oblige tout le monde à utiliser le serveur submission. Si on ne veut 
 
 Note: SPF n'est pas une garantie, c'est juste une aide pour catégoriser
 
-## DKIM
+## DKIM (DomainKeys Identifierd Mail)
 
 Pour avoir des garanties, il faut signer électroniquement.
 
@@ -145,7 +146,7 @@ $ dig +short txt default._domainkey.gnome.org
 
 Mais si on reçoit un mail non signé avec DKIM ?
 
-## DMARC
+## DMARC (Domain-Based Message Authentication Reporting and Conformance)
 
 On interroge DNS:
 
