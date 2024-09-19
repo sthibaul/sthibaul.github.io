@@ -24,11 +24,11 @@ domaine `adsillh.local`: il faut ajouter à notre zone `adsillh.local` un
 enregistrement `MX`:
 
 ```zone
-@       MX      10 alma-srv
+@       MX      10 alma-server:
 ```
 
 On indique ici que pour envoyer des mail à `truc@adsillh.local`, il faut se
-connecter au serveur `alma-srv` (donc `alma-srv.adsillh.local`).
+connecter au serveur `alma-server` (donc `alma-server.adsillh.local`).
 
 À noter qu'on ne peut pas faire pointer un enregistrement `MX` vers un `CNAME`
 (oui, c'est dommage, cela devrait pouvoir fonctionner, mais ce n'est pas prévu).
