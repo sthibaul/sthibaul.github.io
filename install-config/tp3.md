@@ -236,7 +236,7 @@ depuis une autre machine et avec un client mail plus évolué.
 
 ## (bonus) Vers le reste du monde
 
-Essayez d'envoyer un mail vers une adresse qui n'est pas en `u-bordeaux.fr`, et en utilisant dans `From` votre adresse `u-bordeaux.fr` (pour éviter que le mail soit jeté à cause de SPF).
+Essayez d'envoyer un mail vers une adresse qui n'est ni en `adsillh.local` ni en `u-bordeaux.fr`, et en utilisant dans `From` votre adresse `u-bordeaux.fr` (pour éviter que le mail soit jeté à cause de SPF).
 
 Cela ne fonctionne pas, vous ne recevez rien ! Vérifiez la file des mails en attente avec
 
