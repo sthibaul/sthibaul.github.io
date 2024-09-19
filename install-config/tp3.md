@@ -50,6 +50,13 @@ cencées émettre les mails venant de `@adsillh.local`:
 
 Augmentez le serial, redémarrez named.
 
+Vérifiez que vous arrivez effectivement à résoudre les noms:
+
+```
+dig imap.adsillh.local @192.168.56.10
+dig txt adsillh.local @192.168.56.10
+```
+
 ## Firewall
 
 Il faut enfin ouvrir les ports sur le firewall vers tout Internet (et pas
