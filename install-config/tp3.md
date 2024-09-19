@@ -254,7 +254,7 @@ Il a essayé de se connecter au MX pour `@aquilenet.fr`, mais le Cremi ne laisse
 
 Retrouvez les lignes `relayhost`, et indiquez-y `smtp.u-bordeaux.fr`
 
-Redémarrez postfix, constatez que le mail est bien parti.
+Redémarrez postfix, constatez que le mail est bien parti. Au besoin, utilisez `postqueue -f` pour forcer postfix à réessayer d'envoyer les mails.
 
 Regardez à la fin de `/var/log/maillog` pour avoir le détail de ce qui s'est passé: il est passé par le smarthost. Ce log est très utile pour pouvoir débugguer !
 
