@@ -236,11 +236,7 @@ depuis une autre machine et avec un client mail plus évolué.
 
 ## (bonus) Vers le reste du monde
 
-Réessayez d'envoyer un mail, cette fois vers votre adresse `@etu.u-bordeaux et en utilisant dans `From` votre adresse `u-bordeaux.fr` aussi, pour éviter que le mail soit jeté à cause de SPF.
-
-Cela devrait fonctionner.
-
-Essayez vers une adresse qui n'est pas en `u-bordeaux.fr`.
+Essayez d'envoyer un mail vers une adresse qui n'est pas en `u-bordeaux.fr`, et en utilisant dans `From` votre adresse `u-bordeaux.fr` (pour éviter que le mail soit jeté à cause de SPF).
 
 Cela ne fonctionne pas, vous ne recevez rien ! Vérifiez la file des mails en attente avec
 
