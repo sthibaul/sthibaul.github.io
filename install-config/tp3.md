@@ -36,9 +36,9 @@ connecter au serveur `alma-server` (donc `alma-server.adsillh.local`).
 On déclare également des alias pour les serveurs que nos utilisateurs vont utiliser:
 
 ```zone
-smtp    CNAME   alma-srv
-imap    CNAME   alma-srv
-pop3    CNAME   alma-srv
+smtp    CNAME   alma-server
+imap    CNAME   alma-server
+pop3    CNAME   alma-server
 ```
 
 Enfin, on peut ajouter un enregistrement SPF pour déclarer quelles IPs sont
