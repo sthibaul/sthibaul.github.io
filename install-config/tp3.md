@@ -371,10 +371,16 @@ Vous pouvez aussi essayer de configurer thunderbird dans votre session Cremi.
 
 # Exercice 5 (bonus): SASL pour authentification auprès du serveur de mails
 
-Quand mutt a envoyé son mail, il a pu le faire car il est sur le réseau du serveur de mail, qu'on avait indiqué dans `mynetworks`. Quand vous utilisez thunderbird depuis votre session Cremi, c'est encore le cas (il utilise la adresse `192.158.56.1`).
+Quand mutt a envoyé son mail, il a pu le faire car il est sur le réseau du
+serveur de mail, qu'on avait indiqué dans `mynetworks`. Quand vous utilisez
+thunderbird depuis votre session Cremi, c'est encore le cas (il utilise la
+adresse `192.158.56.1`).
 
-Mais si vous êtes complètement ailleurs sur Internet, il vous faut utiliser
-le port 587 et vous authentifier auprès de votre serveur de mail.
+Mais si vous êtes complètement ailleurs sur Internet, il vous faut utiliser le
+port 587 et vous authentifier auprès de votre serveur de mail. D'autant plus
+que puisqu'on a mis un enregistrement SPF pour `adsillh.local.`, on ne pourra
+pas utiliser le smarthost d'un FAI ailleurs sur Internet, il faut que les mails
+`From: *@adsillh.local` soient émis depuis notre serveur de mail.
 
 Pour se connecter en pop3/imap, on a utilisé notre login/password unix `admin`,
 en effet dovecot a cela configuré par défaut.  postfix n'a cependant pas cela par défaut. Le port 587 n'est même pas ouvert par défaut en fait.
