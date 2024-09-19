@@ -198,13 +198,13 @@ ehlo myname
 250-DSN
 250 SMTPUTF8
 mail from:<toto@example.com>
+250 2.1.5 Ok
 rcpt to:<admin@adsillh.local>
+250 2.1.5 Ok
 data
+354 End data with <CR><LF>.<CR><LF>
 Hello!  Ceci est un test !
 .
-250 2.1.0 Ok
-250 2.1.5 Ok
-354 End data with <CR><LF>.<CR><LF>
 250 2.0.0 Ok: queued as 289EB10948EA
 quit
 221 2.0.0 Bye
