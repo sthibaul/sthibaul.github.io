@@ -1,6 +1,8 @@
 Cours 4: LDAP
 =============
 
+(Lightweight Directory Access Protocol)
+
 # Annuaires électroniques (NIS/YP, LDAP, Active Directory)
 
 Typiquement, gérer les utilisateurs:
@@ -61,7 +63,7 @@ mail: jean@exemple.fr
 uid: jean
 uidNumber: 1000
 gidNumber: 1000
-userPassword:: JHkkajlUJFZRZk0vQ0FUYzdOLklSTFp6QUhqeTAkclZwREl5ekUveU5jM2JSRjcyQXR2T0dGVzFuRXhndFh1a0VOY3EveE1tQQoK
+userPassword:: e1NTSEF9dXNhSFVzYWcvTXpsL2FsNE9Kd1NUL2JEUElTb3FhTzIK
 loginShell: /bin/zsh
 homeDirectory: /home/jean
 objectClass: top
@@ -74,6 +76,7 @@ objectClass: posixAccount
 # Schémas
 
 Beaucoup d'informations dans un objet LDAP !
+(Il y a même un attribut `drink` pour indiquer la boisson favorite d'une personne :) )
 
 Essentiellement des attributs sous forme de clé-valeur, mais comment s'y
 retrouver, comment est-on censé nommer les attributs ? Grâce aux schémas.
@@ -142,7 +145,7 @@ objectClass: inetOrgPerson
 cn: Postfix
 sn: Postmaster
 uid: postfix
-userPassword:: JHkkajlUJHZRdVJlTjhiZUZJLmtaOWdFSG5TNy8kSzBpdUZUZmtBSmRvVnh2MC5MQ0hiRGpQS1NUbWtyay5kdzlzOWp0L2hFMQo=
+userPassword:: e1NTSEF9dXNhSFVzYWcvTXpsL2FsNE9Kd1NUL2JEUElTb3FhTzIK
 ```
 
 On peut essayer de l'utiliser pour faire une requête:
