@@ -16,10 +16,12 @@ serveur ldap à utiliser.
 
 Avez-vous pensé à mettre à jour le serial ?
 
+Vérifiez que l'alias fonctionne.
+
 ## Firewall
 
 Dans notre cas on va commencer par interroger en local, donc le firewall ne
-gênera pas.
+gênera pas au début.
 
 ## Ajouter le dépôt EPEL
 
@@ -75,7 +77,7 @@ On peut y voir que le domaine utilisé est actuellement `my-domain.com`, on
 voudrait changer cela. Pour cela il faut modifier les attributs correspondant de
 l'objet `'olcDatabase={2}mdb,cn=config'`. On pourrait taper tout en interactif,
 mais le risque de typo est grand. Il vaut donc mieux préparer un fichier
-`todo.ldif` avec les modifications voulues:
+`todo.ldif` contenant les modifications voulues:
 
 ```ldif
 dn: olcDatabase={2}mdb,cn=config
@@ -93,9 +95,9 @@ Le format est un peu verbeux...
 
 Avec `dn` on indique l'objet à modifier.
 
-Avec `changetype` on indique si on veut modifier un objet existant ou en ajouter (`add`) ou en enlever (`delete`). Ici on modifie un objet existant.
+Avec `changetype` on indique si on veut modifier (`modify`) un objet existant ou en ajouter (`add`) ou en enlever (`delete`). Ici on modifie un objet existant.
 
-Avec `replace` on indique qu'on veut remplacer un attribut existant.
+Avec `replace` on indique qu'on veut remplacer un attribut existant (on pourrait aussi en ajouter (`add`) ou enlever (`delete`)).
 
 Et enfin on donne la nouvelle valeur de l'attribut.
 
@@ -130,14 +132,23 @@ cherché: `cn` et `mail`.
 ## Permissions
 
 Pour se simplifier la vie, on va permettre à root de modifier la base, et aux
-autres de juste lire:
+autres de juste lire, sauf le mot de passe:
 
 ```ldif
 dn: olcDatabase={2}mdb,cn=config
 changetype: modify
-add: olcAccess
-olcAccess: to * by dn.base="gidNumber=0+uidNumber=0,cn=peercred,cn=external,cn=auth" write by * read
+replace: olcAccess
+olcAccess: {0}to attrs=userPassword by dn.base="gidNumber=0+uidNumber=0,cn=peercred,cn=external,cn=auth" write by anonymous auth by * none
+olcAccess: {1}to * by dn.base="gidNumber=0+uidNumber=0,cn=peercred,cn=external,cn=auth" write by * read
 ```
+
+La première règle (`{0}`) précise d'abord les droits pour l'attribut
+`userPassword`: pour root (uid 0) il a droit d'écriture (et donc lecture
+aussi), pour les clients non encore connectés il peut servir à s'authentifier,
+et pour les autres ils ne peuvent rien en faire.
+
+La deuxième règle (`{1}`) préciser les droits pour les autres attributs: root
+a le droit d'écriture, les autres ont le droit de lecture.
 
 On peut injecter, et l'on peut vérifier que cela a bien été mis à jour.
 
@@ -147,7 +158,7 @@ On peut injecter, et l'on peut vérifier que cela a bien été mis à jour.
 
 Maintenant que l'on peut écrire dans la base LDAP, créons une simple
 hiérarchie `dc=adsillh,dc=local` avec juste des utilisateurs dedans. On
-prépare le fichier `todo.ldif` pour ajouter les objets:
+prépare le fichier `todo.ldif` pour ajouter les objets conteneurs:
 
 ```ldif
 dn: dc=adsillh,dc=local
@@ -214,7 +225,7 @@ utilisateurs. Il faut installer la partie ldap:
 # dnf install sssd-ldap oddjob-mkhomedir
 ```
 
-Et créer un fichier de configuration `/etc/sssd/sssd.conf` :
+Et créer un fichier de configuration `/etc/sssd/sssd.conf` pour configurer l'utilisation de LDAP (oui, les `%2f` sont faits exprès) :
 
 ```
 [domain/default]
@@ -259,12 +270,14 @@ On peut lui donner un mot de passe
 # ldappasswd -H ldapi:/// -Y EXTERNAL -S cn=toto,ou=Etudiants,dc=adsillh,dc=local
 ```
 
-Et l'on peut se logguer ! Sauf qu'il n'a pas encore de `/home/toto`, activons le
-service qui peut le créer à la volée:
+Et l'on peut se logguer en tant que `toto` ! Sauf qu'il n'a pas encore de
+`/home/toto`, activons le service qui peut le créer à la volée:
 
 ```shell
 # systemctl enable --now oddjobd
 ```
+
+En se reloggant, cette fois on a bien un home !
 
 # Exercice 5 (bonus): TLS
 
@@ -280,8 +293,8 @@ Il faut les générer, les poser à un endroit, et s'assurer que `slapd` peut
 lire la clé privée.
 
 Pour les questions que pose `openssl` on peut laisser les valeurs par défaut
-en validant tout avec juste `entrée`, *sauf* pour la question `Common
-Name` qui *doit* être répondue avec le nom de votre serveur, par exemple
+en validant tout avec juste `entrée`, *sauf* pour la question
+`Common Name` qui *doit* être répondue avec le nom de votre serveur, par exemple
 `alma-server.adsillh.local`
 
 ```shell
@@ -308,7 +321,7 @@ replace: olcTLSCertificateFile
 olcTLSCertificateFile: /etc/openldap/certs/ldap.crt
 ```
 
-Vérifiez que le `ldapmodify` ne produit pas d'erreur.
+Vérifiez bien que le `ldapmodify` ne produit pas d'erreur.
 
 Dans `/etc/openldap/ldap.conf`, on configure la partie client LDAP. Sur votre VM serveur
 mettez-le à jour pour pointer sur votre serveur ldap:
@@ -342,7 +355,7 @@ Il ne reste qu'à ouvrir le firewall:
 ```
 
 Passez sur la VM client, copiez-y la clé publique `ldap.crt` du serveur,
-configurez `ldap.conf`, et testez-y `ldapsearch` (en ldaps seulement).
+configurez `ldap.conf` de la même façon, et testez-y `ldapsearch` (en ldaps seulement).
 
 ## Authentification par LDAP
 
@@ -355,11 +368,28 @@ Cette fois pour la configuration il faut utiliser l'url
 
 Vérifiez que du coup le mail `toto@adsillh.local` fonctionne immédiatement !
 
-On pourrait par contre éventuellement utiliser LDAP pour activer des adresses
-mail, mais pas pour les comptes unix. Dans ce cas il faut configurer `postfix`
-pour utiliser `ldap`.
-
 ## Un nouveau venu
 
 Ajoutez un nouvel utilisateur dans LDAP. Vérifiez qu'immédiatement il obtient
 un compte Unix partout, et une adresse email.
+
+## Note: Des mails sans compte Unix
+
+On pourrait par contre éventuellement vouloir utiliser LDAP pour activer des
+adresses mail, mais pas pour les comptes unix (cas typique d'un hébergeur de
+mails qui ne souhaite pas fournir de compte Unix complet). Dans ce cas on peut
+par exemple configurer `postfix` pour confier les mails à dovecot via
+`virtual_transport`, et configurer dovecot pour se connecter à LDAP et traduire
+les attributs LDAP en configuration mail (où déposer les mails, quel mot de
+passe utiliser pour l'authentification imap/pop3, etc.). En général on
+préfère créer un objet ldap dans un `ou` séparé, avec un attribut
+`userPassword`, et donner les permissions nécessaires de lecture de la base à
+cet utilisateur, que l'on fait utiliser par dovecot.
+
+## Note: redondance
+
+Il est possible d'installer un deuxième serveur LDAP. La mise en place de la
+synchronisation est un peu délicate car il y a des parties de configuration
+propres à chaque serveur, et le reste doit être répliqué. Une fois le
+deuxième serveur LDAP, on peut pointer les clients vers les deux serveurs LDAP
+pour obtenir la redondance.
