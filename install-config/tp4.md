@@ -184,9 +184,10 @@ Ici on n'a pas mis de `changetype`, car l'on injecte plutôt avec `ldapadd` qui 
 On peut ajouter un étudiant:
 
 ```ldif
-dn: cn=toto,ou=Etudiants,dc=adsillh,dc=local
-cn: toto
-sn: Toto
+dn: cn=Toto Lapin,ou=Etudiants,dc=adsillh,dc=local
+cn: Toto Lapin
+givenName: Toto
+sn: Lapin
 uid: toto
 uidNumber: 10000
 gidNumber: 10000
@@ -278,6 +279,21 @@ Et l'on peut se logguer en tant que `toto` ! Sauf qu'il n'a pas encore de
 ```
 
 En se reloggant, cette fois on a bien un home !
+
+Ajoutez un autre utilisateur `tata` dans LDAP, constatez que son compte Unix
+`tata` est disponible immédiatement.
+
+Essayons de changer la fiche de l'utilisateur `toto`: modifiez l'attribut
+gidNumber pour y mettre 20000. Relancez `id toto`, constatez que cela n'a pas
+changé ! En effet `sssd` utilise un cache pour éviter de solliciter le
+serveur LDAP en permanence. On peut vider le cache avec `sss_cache -E` et `id
+toto` devrait désormais donner la réponse mise à jour.
+
+Appelez `id tata` , puis supprimez l'objet LDAP de `tata`, et appelez `id tata`
+de nouveau. Essayez de vous logguer avec. Le cache ne voit pas la suppression
+non plus, flushez-le pour forcer la disparition du compte unix. Mais son home
+lui n'est pas supprimé (c'est rarement une bonne idée de supprimer des
+données automatiquement de toutes façons)
 
 # Exercice 5 (bonus): TLS
 
