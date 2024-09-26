@@ -201,7 +201,11 @@ objectClass: posixAccount
 
 On a donné à l'étudiant la classe `posixAccount` pour remplir tous les champs
 utiles à ce qu'il ait un compte unix, et la classe `inetOrgPerson` pour remplir
-le champ `mail` (i.e. qu'il "existe" sur Internet (`inet organization`))
+le champ `mail` (i.e. qu'il "existe" sur Internet (`inet organization`)).
+
+Retrouvez la définition de la classe `inetOrgPerson` dans
+`/etc/openldap/schema/*.schema`, constatez que la classe permet d'inclure
+beaucoup d'informations, mais n'en exige aucune :)
 
 On peut vérifier l'ajout en regardant toute la base:
 
@@ -214,6 +218,11 @@ On peut voir les opérations dans le log:
 ```shell
 # journalctl -u slapd
 ```
+
+Dans l'exercice suivant, on va vouloir retrouver les étudiants à partir de
+leur `uid`, ce sera donc intéressant d'indexer la base sur l'attribut `uid`.
+Modifiez donc l'attribut `olcDbIndex` mentionné plus haut pour ajouter
+l'attribut `uid` à côté de l'attribut `givenname`.
 
 # Exercice 4: authentification par LDAP
 
