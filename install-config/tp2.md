@@ -296,12 +296,6 @@ Il faut aussi que le serveur DNS de la première VM serveur accepte ces notifica
 
 (on pourrait éventuellement utiliser une clé différente, mais simplifions-nous la vie)
 
-Note: on avait oublié au TP précédent d'activer dns de manière permanente dans le firewall:
-
-```shell
-# firewall-cmd --zone=work --change-interface=enp0s8 --permanent
-```
-
 Rechargez la configuration du serveur DNS de la première VM serveur. Observez le log `/var/log/messages` sur les deux VMs serveur pendant la re-négociation du bail par la VM client, vous devriez voir la mise à jour DNS se faire !
 
 # Exercice 5 (bonus): Redondance DNS
