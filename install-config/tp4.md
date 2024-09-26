@@ -181,7 +181,7 @@ Ici on n'a pas mis de `changetype`, car l'on injecte plutôt avec `ldapadd` qui 
 
 ## Un utilisateur
 
-On peut ajouter un étudiant:
+On peut ajouter un objet pour représenter un étudiant:
 
 ```ldif
 dn: cn=Toto Lapin,ou=Etudiants,dc=adsillh,dc=local
@@ -203,7 +203,7 @@ On a donné à l'étudiant la classe `posixAccount` pour remplir tous les champs
 utiles à ce qu'il ait un compte unix, et la classe `inetOrgPerson` pour remplir
 le champ `mail` (i.e. qu'il "existe" sur Internet (`inet organization`))
 
-On peut vérifier l'ajout:
+On peut vérifier l'ajout en regardant toute la base:
 
 ```shell
 # ldapsearch -H ldapi:/// -Y EXTERNAL -b dc=adsillh,dc=local
@@ -280,8 +280,18 @@ Et l'on peut se logguer en tant que `toto` ! Sauf qu'il n'a pas encore de
 
 En se reloggant, cette fois on a bien un home !
 
-Ajoutez un autre utilisateur `tata` dans LDAP, constatez que son compte Unix
-`tata` est disponible immédiatement.
+Ajoutez un autre utilisateur `tata` dans LDAP, ayant le même `gidNumber` mais
+un `uidNumber` différent (et avec le login et prénom corrigés), constatez que
+son compte Unix `tata` est disponible immédiatement.
+
+Constatez que l'on peut récupérer l'un des deux utilisateurs seulement en utilisant un filtre:
+
+```shell
+# ldapsearch -H ldapi:/// -Y EXTERNAL -b dc=adsillh,dc=local uid=toto
+```
+
+Essayez un autre filtre, essayez de filtrer sur `gidNumber` pour constater que
+vous récupérez bien les deux.
 
 Essayons de changer la fiche de l'utilisateur `toto`: modifiez l'attribut
 gidNumber pour y mettre 20000. Relancez `id toto`, constatez que cela n'a pas
