@@ -277,7 +277,7 @@ que l'on avait choisis:
 On peut lui donner un mot de passe
 
 ```shell
-# ldappasswd -H ldapi:/// -Y EXTERNAL -S cn=toto,ou=Etudiants,dc=adsillh,dc=local
+# ldappasswd -H ldapi:/// -Y EXTERNAL -S cn="Toto Lapin",ou=Etudiants,dc=adsillh,dc=local
 ```
 
 Et l'on peut se logguer en tant que `toto` ! Sauf qu'il n'a pas encore de
