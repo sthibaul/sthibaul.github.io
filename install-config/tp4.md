@@ -373,13 +373,13 @@ Vous devriez désormais pouvoir vous connecter en `ldap://` avec l'utilisateur
 `toto`:
 
 ```shell
-$ ldapsearch -x -W -D cn=toto,ou=Etudiants,dc=adsillh,dc=local -b dc=adsillh,dc=local
+$ ldapsearch -x -W -D cn="Toto Lapin",ou=Etudiants,dc=adsillh,dc=local -b dc=adsillh,dc=local
 ```
 
 Mais aussi en `ldaps://`
 
 ```shell
-$ ldapsearch -x -W -D cn=toto,ou=Etudiants,dc=adsillh,dc=local -b dc=adsillh,dc=local
+$ ldapsearch -x -W -D cn="Toto Lapin",ou=Etudiants,dc=adsillh,dc=local -b dc=adsillh,dc=local
 ```
 
 Il ne reste qu'à ouvrir le firewall:
