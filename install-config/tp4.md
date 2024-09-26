@@ -296,6 +296,12 @@ Et l'on peut se logguer en tant que `toto` ! Sauf qu'il n'a pas encore de
 
 En se reloggant, cette fois on a bien un home !
 
+L'utilisateur peut maintenant aussi lui-même se connecter à ldap pour lire des informations:
+
+```shell
+$ ldapsearch -H ldapi:/// -x -W -D cn="Toto Lapin",ou=Etudiants,dc=adsillh,dc=local -b dc=adsillh,dc=local
+```
+
 Ajoutez un autre utilisateur `tata` dans LDAP, ayant le même `gidNumber` mais
 un `uidNumber` différent (et avec le login et prénom corrigés), constatez que
 son compte Unix `tata` est disponible immédiatement.
