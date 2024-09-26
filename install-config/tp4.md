@@ -221,8 +221,15 @@ On peut voir les opérations dans le log:
 
 Dans l'exercice suivant, on va vouloir retrouver les étudiants à partir de
 leur `uid`, ce sera donc intéressant d'indexer la base sur l'attribut `uid`.
-Modifiez donc l'attribut `olcDbIndex` mentionné plus haut pour ajouter
-l'attribut `uid` à côté de l'attribut `givenname`.
+
+Retournez voir la configuration de LDAP, on y voit l'indexation activée actuellement:
+
+```
+olcDbIndex: objectClass eq,pres
+olcDbIndex: ou,cn,mail,surname,givenname eq,pres,sub
+```
+
+Modifiez donc cet attribut `olcDbIndex` pour ajouter `uid` à côté de `givenname`.
 
 # Exercice 4: authentification par LDAP
 
