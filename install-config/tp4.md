@@ -417,9 +417,7 @@ Configurez l'authentification des utilisateurs Unix par LDAP sur la VM client au
 Cette fois pour la configuration `sssd.conf` il faut utiliser l'url
 `ldaps://ldap.adsillh.local`
 
-## Les mails
-
-Vérifiez que du coup le mail `toto@adsillh.local` fonctionne immédiatement !
+Vérifiez `id toto` et essayez de vous logguer en tant que toto
 
 ## Un nouveau venu
 
