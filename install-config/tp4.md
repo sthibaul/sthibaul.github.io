@@ -1,6 +1,8 @@
 TP4: installation LDAP
 ======================
 
+TODO: à enrichir
+
 On continue toujours avec nos VMs serveur et client.
 
 Pour l'instant on travaille seulement sur la VM serveur.
