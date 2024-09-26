@@ -358,7 +358,7 @@ set smtp_url = "smtp://smtp.adsillh.local:25"
 
 Lancez `mutt`.
 
-S'il n'arrive pas à résoudre `imap.u-bordeaux.fr`, vérifiez déjà que vous arrivez à le résoudre depuis le serveur.
+S'il n'arrive pas à résoudre `imap.adsillh.local`, vérifiez déjà que vous arrivez à le résoudre depuis le serveur.
 Éventuellement, essayez d'enlever les fichiers de journal de named, ils nous embêtent apparemment:
 
 ```shell
