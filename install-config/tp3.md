@@ -24,7 +24,7 @@ domaine `adsillh.local`: il faut ajouter à notre zone `adsillh.local` un
 enregistrement `MX`:
 
 ```zone
-@       MX      10 alma-server:
+@       MX      10 alma-server
 ```
 
 On indique ici que pour envoyer des mail à `truc@adsillh.local`, il faut se
