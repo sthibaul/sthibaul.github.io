@@ -329,8 +329,7 @@ lire la clé privée.
 
 Pour les questions que pose `openssl` on peut laisser les valeurs par défaut
 en validant tout avec juste `entrée`, *sauf* pour la question
-`Common Name` qui *doit* être répondue avec le nom de votre serveur, par exemple
-`alma-server.adsillh.local`
+`Common Name` qui *doit* être répondue avec `ldap.adsillh.local`
 
 ```shell
 # cd
