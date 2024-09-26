@@ -403,14 +403,18 @@ Il ne reste qu'à ouvrir le firewall:
 # firewall-cmd --reload
 ```
 
-Passez sur la VM client, copiez-y la clé publique `ldap.crt` du serveur,
-configurez `ldap.conf` de la même façon, et testez-y `ldapsearch` (en ldaps seulement).
+Passez sur la VM client,
+
+* copiez-y la clé publique `ldap.crt` du serveur,
+* Lancez `restorecon /etc/openldap/certs/*`
+* configurez `ldap.conf` de la même façon que sur le serveur
+* et testez-y `ldapsearch` (en ldaps seulement).
 
 ## Authentification par LDAP
 
 Configurez l'authentification des utilisateurs Unix par LDAP sur la VM client aussi.
 
-Cette fois pour la configuration il faut utiliser l'url
+Cette fois pour la configuration `sssd.conf` il faut utiliser l'url
 `ldaps://ldap.adsillh.local`
 
 ## Les mails
