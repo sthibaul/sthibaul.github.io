@@ -333,8 +333,7 @@ On pourrait faire de même en IMAP, qui permet aussi de changer de dossier. Le p
 
 Sur votre VM client, installez les packages `mutt` et `nano`
 
-Repassez en tant que simple `admin`, et créez le fichier `.muttrc` expliquant
-à mutt votre situation:
+Créez le fichier `.muttrc` expliquant à mutt votre situation:
 
 ```
 # Adresse électronique de l'expéditeur
