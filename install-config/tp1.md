@@ -185,7 +185,15 @@ Pendant que la VM s'installe, revenez sur la partie installation et configuratio
 
 # Si vous avez un souci de réseau
 
-Vérifiez votre configuration: dans `/etc/sysconfig/network-scripts/ifcfg-enp0s3` (la première carte réseau)
+Vérifiez votre configuration, et notamment les éléments
+
+```
+DEFROUTE
+ONBOOT
+IPV4_DNS_PRIORITY
+```
+
+Dans `/etc/sysconfig/network-scripts/ifcfg-enp0s3` (la première carte réseau)
 
 ```
 TYPE=Ethernet
@@ -205,7 +213,10 @@ DEVICE=enp0s3
 ONBOOT=yes
 ```
 
-Et dans `/etc/sysconfig/network-scripts/ifcfg-enp0s8` (la deuxème carte réseau), sur le serveur:
+(on veut qu'elle soit allumée automatiquement et soit utilisée comme route par
+défaut.)
+
+Et dans `/etc/sysconfig/network-scripts/ifcfg-enp0s8` (la deuxème carte réseau), sur *le serveur*:
 
 ```
 TYPE=Ethernet
@@ -227,10 +238,37 @@ IPADDR=192.168.56.10
 PREFIX=24
 DNS1=127.0.0.1
 DOMAIN=adsillh.local
-IPV4_DNS_PRIORITY=10
+IPV4_DNS_PRIORITY=-10
 ```
 
-(sur le client cela devrait être essentiellement comme `enp0s3`)
+(on veut qu'elle soit allumée automatiquement mais ne soit pas utilisée
+comme route par défaut, par contre le DNS `127.0.0.1` doit être utilisé par
+défaut.)
+
+Et dans `/etc/sysconfig/network-scripts/ifcfg-enp0s8` (la deuxème carte réseau), sur *le client*:
+
+```
+TYPE=Ethernet
+PROXY_METHOD=none
+BROWSER_ONLY=no
+BOOTPROTO=dhcp
+DEFROUTE=no
+IPV4_FAILURE_FATAL=no
+IPV6INIT=yes
+IPV6_AUTOCONF=yes
+IPV6_DEFROUTE=yes
+IPV6_FAILURE_FATAL=no
+IPV6_ADDR_GEN_MODE=eui64
+NAME=enp0s8
+UUID=dacd9599-a254-4fc4-ad1b-e80d3956173b    # ou toute autre valeur
+DEVICE=enp0s8
+ONBOOT=yes
+IPV4_DNS_PRIORITY=-10
+```
+
+(on veut qu'elle soit allumée automatiquement mais ne soit pas utilisée comme
+route par défaut, par contre le DNS fourni par DHCP doit être utilisé par
+défaut.)
 
 Si vous changez quelque chose dans ces fichiers, il faut utiliser
 
@@ -238,7 +276,7 @@ Si vous changez quelque chose dans ces fichiers, il faut utiliser
 # nmcli con reload
 ```
 
-Pour les recharger
+Pour les recharger, avant d'utiliser `up` / `down`
 
 # Exercice 1: ajouter un serveur DHCP
 
