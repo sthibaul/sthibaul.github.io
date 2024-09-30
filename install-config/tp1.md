@@ -1,4 +1,4 @@
-TP1: installation de base, dhcp, dns
+TP1: installation de base, DHCP, DNS
 ====================================
 
 Pour les quelques TPs qui seront présentés, on partira sur une infrastructure relativement simple basée sur Virtual Box.
