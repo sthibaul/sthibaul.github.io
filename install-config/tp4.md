@@ -424,20 +424,218 @@ Vérifiez `id toto` et essayez de vous logguer en tant que toto
 Ajoutez un nouvel utilisateur dans LDAP. Vérifiez qu'immédiatement il obtient
 un compte Unix partout, et une adresse email.
 
-## Note: Des mails sans compte Unix
+# Exercice 6: Dovecot + LDAP
 
-On pourrait par contre éventuellement vouloir utiliser LDAP pour activer des
-adresses mail, mais pas pour les comptes unix (cas typique d'un hébergeur de
-mails qui ne souhaite pas fournir de compte Unix complet). Dans ce cas on peut
-par exemple configurer `postfix` pour confier les mails à dovecot via
-`virtual_transport`, et configurer dovecot pour se connecter à LDAP et traduire
-les attributs LDAP en configuration mail (où déposer les mails, quel mot de
-passe utiliser pour l'authentification imap/pop3, etc.). En général on
-préfère créer un objet ldap dans un `ou` séparé, avec un attribut
-`userPassword`, et donner les permissions nécessaires de lecture de la base à
-cet utilisateur, que l'on fait utiliser par dovecot.
+We will now connect Dovecot to our LDAP server, so that users can have an email
+address without necessarily having a Unix account (that's the typical case of a
+mail hosting service). In that case, we can configure `postfix` to give mails to
+`dovecot` via `virtual_transport`, and configure `dovecot` to connect to LDAP
+and translate LDAP attributes into mail configuration (where to put mails, which
+password use for IMAP/POP3 authentication, etc.)
 
-## Note: redondance
+## Create LDAP users for daemons
+
+In general one prefers to create a separate LDAP object in a separate `ou`, with
+its own password, and add permissions for it to read the LDAP database.
+
+Create a `ou=daemons,dc=adsillh,dc=local` LDAP object (like you created `ou=Etudiants`).
+
+Create a `uid=dovecot,ou=daemons,dc=adsillh,dc=local` LDAP object (like we
+created `Toto Lapin`), with only the `inetOrgPerson` class (so that it can just
+have a `userPassword` field). You can use `Dovecot` as `cn` and `Mailbox` as
+`sn`.
+
+Give a password to this object (like we gave to `Toto Lapin`)
+
+## Create vmail hosting
+
+Even if we don't want to have a Unix account for each mail account, we need a
+Unix account for hosting the mails, called `vmail`, let's create this user and
+check that its home is completely protected:
+
+```shell
+# adduser --uid 5000 vmail
+# ls -ld /home/vmail
+```
+
+## Add virtual mail support in postfix
+
+Let's now tell postfix in `main.cf` to pass mails to dovecot instead of storing
+them itself.
+
+Look for the definition of `mydestination`, to enable the version that does
+*not* include `$mydomain`
+
+that for email accounts in LDAP, we want to
+send them one by one to dovecot:
+
+```
+## Virtual mailbox settings
+virtual_mailbox_domains = adsillh.local
+virtual_transport = lmtp:unix:/run/dovecot/lmtp
+```
+
+## Add virtual mail support in dovecot
+
+Let's now explain dovecot how to check LDAP and where to store incoming mails.
+
+In `conf.d/10-auth.conf` we can enable including `auth-ldap.conf.ext` 
+
+Read that last file, to see that it refers to `/etc/dovecot/dovecot-ldap.conf.ext`
+which we can now create, to tell the dovecot ldap driver how to access LDAP:
+
+```
+# Version to use
+ldap_version = 3
+uris = ldapi:/// # Which server to connect to, here local
+
+# which LDAP object & password to use
+dn = uid=dovecot,ou=daemons,dc=adsillh,dc=local
+dnpass = toto
+
+# which part of LDAP to look in
+base = ou=Etudiants,dc=adsillh,dc=local
+scope = subtree
+
+# What to check and how to translate
+user_filter = (&(objectClass=inetOrgPerson)(mail=%u))
+user_attrs = =home=/home/vmail/%{ldap:mail}
+
+pass_filter = (&(objectClass=inetOrgPerson)(mail=%u))
+pass_attrs = =password=%{ldap:userPassword}
+```
+
+In the filters, we have told that we look for objects that have the `MailUser`
+class, and (`&`) that have the email address (`mail`) that is being looked
+for. We then tell dovecot to use the `mail` attribute from ldap
+(`%{ldap:mail}`), and prepend `/home/vmail/` to obtain the home for the user.
+The password is directly taken from the `userPassword` LDAP attribute.
+
+In `conf.d/10-mail.conf`, 
+
+Also look for `mail_location`, and uncomment to force using `Maildir`:
+
+```
+mail_location = maildir:~/Maildir
+```
+
+also, set these to force using the `vmail` user for the maildir:
+
+```
+mail_uid = 5000
+mail_gid = 5000
+```
+
+For security we also want to restrict dovecot to read/writing mails from there:
+
+```
+valid_chroot_dirs = /home/vmail
+```
+
+Last but not least, we also need to make SELinux allow `dovecot` to access
+`/var/run/ldapi` :
+
+```shell
+# setsebool -P authlogin_nsswitch_use_ldap 1
+```
+
+## Test with a user with mail but not unix account
+
+Create a `cn=Titi Lapin,ou=Etudiants,dc=adsillh,dc=local` LDAP object similarly to other such objects, but *not* the `posixAccount` class, and thus not the `homeDirectory`, `uid`, `uidNumber`, `gidNumber` attributes
+
+Try to send a mail to it, and look in `/home/vmail/titi@adsillh.local/`
+
+If it is not there, you can check `mailq` to see it in the queue, `journalctl -u
+postfix` to see if it's postfix that has troubles, and `journalctl -u dovecot`
+to see if it's dovecot that has troubles. After fixing something in the config,
+restart the corresponding daemon, and use `postqueue -f` to for postfix to retry
+delivering the mail.
+
+## Reading mail (Bonus)
+
+If you try to run
+
+```shell
+# ldapsearch -H ldapi:/// -x -W -D uid=dovecot,ou=daemons,dc=adsillh,dc=local
+```
+
+You will see that we do not get the `userPassword` attribute. Indeed, we had
+only permitted root to do so.
+
+Modify the `olcAccess` attribute of `{2}mdb,cn=config` , to add
+`by dn.base=uid=dovecot,ou=daemons,dc=adsillh,dc=local read`
+
+
+Check `ldapsearch` again, now you see the `userPassword` attribute.
+
+Set a password for `cn="Titi Lapin"`
+
+On the client VM, change `.muttrc` to use the `titi@adsillh.local` login instead
+of `admin` (yes, there are now two `@`).
+
+You should be able to read the mail you have sent.
+
+Try to send a mail, that should work too!
+
+## Aliases (Bonus)
+
+Some users may want to have several email addresses that all end up in the same
+mailbox. We can tell postfix to perform the rewriting through virtual mapping
+before giving the mail to dovecot.
+
+Let's first inject the definition for the `inetLocalMailRecipient` class that we
+can use for this:
+
+```
+# ldapadd -H ldapi:/// -Y EXTERNAL -f /etc/openldap/schema/misc.ldif
+```
+
+Add to `cn=Titi Lapin` this:
+
+```
+objectClass: inetLocalMailRecipient
+mailLocalAddress: tititi@adsillh.local
+mailLocalAddress: titititi@adsillh.local
+mailLocalAddress: tititititi@adsillh.local
+```
+
+Create a `uid=postfix,ou=daemons,dc=adsillh,dc=local` LDAP object and give it a password.
+
+We can now make postfix look for these aliases in addition to what we already
+defined in `main.cf`:
+
+```
+virtual_alias_maps = hash:/etc/postfix/virtual, ldap:/etc/postfix/virtual_aliases.cf
+```
+
+And in `virtual_aliases.cf`:
+
+```
+## Postfix-LDAP settings - aliases
+version = 3
+server_host = ldapi:///
+
+bind = yes
+bind_dn = uid=postfix,ou=daemons,dc=adsillh,dc=local
+bind_pw = toto
+
+search_base = ou=Etudiants,dc=adsillh,dc=local
+scope = sub
+
+query_filter = (&(objectClass=inetLocalMailRecipient)(mailLocalAddress=%s))
+result_attribute = mail
+```
+
+The meanings of the fields should now be very familiar :)
+
+Note that we do not need to give postfix access to user passwords, that's even
+better for security.
+
+Restart postfix, try to send a mail to `tititi@adsillh.local`, you should see in
+`maillog` that it is first rewritten to `titi@adsillh.local` before giving it to
+dovecot for delivery.
+
+# Note: redondance
 
 Il est possible d'installer un deuxième serveur LDAP. La mise en place de la
 synchronisation est un peu délicate car il y a des parties de configuration
