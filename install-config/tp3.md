@@ -348,10 +348,10 @@ set editor = "nano"
 # On s'identifie dès le lancement de Mutt
 set spoolfile="imaps://admin@imap.adsillh.local/INBOX"
 # On fixe la boite de réception
-set folder="imaps://imap.adsillh.local/INBOX"
+set folder="imaps://admin@imap.adsillh.local/INBOX"
 
 # On envoie les mails via notre serveur aussi
-set smtp_url = "smtp://smtp.adsillh.local:25"
+set smtp_url = "smtp://admin@smtp.adsillh.local:25"
 ```
 
 ## Lecture de mails
