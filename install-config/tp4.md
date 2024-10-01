@@ -445,13 +445,13 @@ created `Toto Lapin`), with only the `inetOrgPerson` class (so that it can just
 have a `userPassword` field). You can use `Dovecot` as `cn` and `Mailbox` as
 `sn`.
 
-Give a password to this object (like we gave to `Toto Lapin`)
+Give a password to this object (like we gave one to `Toto Lapin`)
 
 ## Create vmail hosting
 
 Even if we don't want to have a Unix account for each mail account, we need a
-Unix account for hosting the mails, called `vmail`, let's create this user and
-check that its home is completely protected:
+Unix account for hosting the mails, which we will call `vmail`. Let's create
+this user and check that its home is completely protected:
 
 ```shell
 # adduser --uid 5000 vmail
@@ -466,8 +466,7 @@ them itself.
 Look for the definition of `mydestination`, to enable the version that does
 *not* include `$mydomain`
 
-that for email accounts in LDAP, we want to
-send them one by one to dovecot:
+And add this at the end to tell postfix to just relay `@adsillh.local` mails to dovecot:
 
 ```
 ## Virtual mailbox settings
@@ -479,7 +478,7 @@ virtual_transport = lmtp:unix:/run/dovecot/lmtp
 
 Let's now explain dovecot how to check LDAP and where to store incoming mails.
 
-In `conf.d/10-auth.conf` we can enable including `auth-ldap.conf.ext` 
+In `conf.d/10-auth.conf` we can simply enable including `auth-ldap.conf.ext` 
 
 Read that last file, to see that it refers to `/etc/dovecot/dovecot-ldap.conf.ext`
 which we can now create, to tell the dovecot ldap driver how to access LDAP:
@@ -493,7 +492,7 @@ uris = ldapi:/// # Which server to connect to, here local
 dn = uid=dovecot,ou=daemons,dc=adsillh,dc=local
 dnpass = toto
 
-# which part of LDAP to look in
+# which part of LDAP to look into
 base = ou=Etudiants,dc=adsillh,dc=local
 scope = subtree
 
@@ -506,14 +505,13 @@ pass_attrs = =password=%{ldap:userPassword}
 ```
 
 In the filters, we have told that we look for objects that have the `MailUser`
-class, and (`&`) that have the email address (`mail`) that is being looked
+class, and (`&`) that have the email address (`mail` attribute) that is being looked
 for. We then tell dovecot to use the `mail` attribute from ldap
-(`%{ldap:mail}`), and prepend `/home/vmail/` to obtain the home for the user.
-The password is directly taken from the `userPassword` LDAP attribute.
+(`%{ldap:mail}`), and prepend `/home/vmail/` to obtain the `home` for the
+user, where mails will be put into.  The password is directly taken from the
+`userPassword` LDAP attribute.
 
-In `conf.d/10-mail.conf`, 
-
-Also look for `mail_location`, and uncomment to force using `Maildir`:
+In `conf.d/10-mail.conf` look for `mail_location`, and uncomment to force using `Maildir`:
 
 ```
 mail_location = maildir:~/Maildir
@@ -526,30 +524,34 @@ mail_uid = 5000
 mail_gid = 5000
 ```
 
-For security we also want to restrict dovecot to read/writing mails from there:
+For security we also prefer to restrict dovecot to read/writing mails from there:
 
 ```
 valid_chroot_dirs = /home/vmail
 ```
 
 Last but not least, we also need to make SELinux allow `dovecot` to access
-`/var/run/ldapi` :
+`/var/run/ldapi` to connect to LDAP (we could also use ldaps, but ldapi is more efficient and does not require setting up TLS):
 
 ```shell
 # setsebool -P authlogin_nsswitch_use_ldap 1
 ```
 
-## Test with a user with mail but not unix account
+## Test with a user with mail but no unix account
 
-Create a `cn=Titi Lapin,ou=Etudiants,dc=adsillh,dc=local` LDAP object similarly to other such objects, but *not* the `posixAccount` class, and thus not the `homeDirectory`, `uid`, `uidNumber`, `gidNumber` attributes
+Create a `cn=Titi Lapin,ou=Etudiants,dc=adsillh,dc=local` LDAP object similarly
+to what we did for other students, but *without* the `posixAccount` class, and
+thus not the `homeDirectory`, `uid`, `uidNumber`, `gidNumber` attributes, but
+give it `titi@adsillh.local` as `mail` attribute.
 
 Try to send a mail to it, and look in `/home/vmail/titi@adsillh.local/`
 
-If it is not there, you can check `mailq` to see it in the queue, `journalctl -u
-postfix` to see if it's postfix that has troubles, and `journalctl -u dovecot`
-to see if it's dovecot that has troubles. After fixing something in the config,
-restart the corresponding daemon, and use `postqueue -f` to for postfix to retry
-delivering the mail.
+If it is not there, you can check `mailq` to see it in the queue,
+`journalctl -u postfix` to see if it's postfix that has troubles,
+and `journalctl -u dovecot` to see if it's dovecot that has troubles.
+
+After fixing something in the config, remember to restart the corresponding
+daemon, and use `postqueue -f` to tell postfix to retry delivering the mail.
 
 ## Reading mail (Bonus)
 
@@ -559,14 +561,15 @@ If you try to run
 # ldapsearch -H ldapi:/// -x -W -D uid=dovecot,ou=daemons,dc=adsillh,dc=local
 ```
 
-You will see that we do not get the `userPassword` attribute. Indeed, we had
-only permitted root to do so.
+You will see that we do not get the `userPassword` attributes. Indeed, we had
+only permitted root to access them.
 
 Modify the `olcAccess` attribute of `{2}mdb,cn=config` , to add
+
 `by dn.base=uid=dovecot,ou=daemons,dc=adsillh,dc=local read`
 
 
-Check `ldapsearch` again, now you see the `userPassword` attribute.
+Check `ldapsearch` again, now you should see the `userPassword` attributes.
 
 Set a password for `cn="Titi Lapin"`
 
@@ -596,7 +599,6 @@ Add to `cn=Titi Lapin` this:
 objectClass: inetLocalMailRecipient
 mailLocalAddress: tititi@adsillh.local
 mailLocalAddress: titititi@adsillh.local
-mailLocalAddress: tititititi@adsillh.local
 ```
 
 Create a `uid=postfix,ou=daemons,dc=adsillh,dc=local` LDAP object and give it a password.
@@ -633,7 +635,13 @@ better for security.
 
 Restart postfix, try to send a mail to `tititi@adsillh.local`, you should see in
 `maillog` that it is first rewritten to `titi@adsillh.local` before giving it to
-dovecot for delivery.
+dovecot for delivery. And `titititi@adsillh.local` should be working at well.
+
+Change the `mail` attribute of `cn=Titi Latin` to your personal address. Try
+to send a mail to `tititi@adsillh.local`, you should be receiving it :) That
+allows to automatically forward mails to another email domain. You will however
+of course need to add a `mailLocalAddress: titi@adsillh.local` for that address
+to become valid again.
 
 # Note: redondance
 
