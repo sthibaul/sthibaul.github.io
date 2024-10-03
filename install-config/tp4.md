@@ -441,7 +441,8 @@ Create a `ou=daemons,dc=adsillh,dc=local` LDAP object (like you created `ou=Etud
 Create a `uid=dovecot,ou=daemons,dc=adsillh,dc=local` LDAP object (like we
 created `Toto Lapin`), with only the `inetOrgPerson` class (so that it can just
 have a `userPassword` field). You can use `Dovecot` as `cn` and `Mailbox` as
-`sn`.
+`sn`. Note that we have used `uid=dovecot` and not `cn=dovecot`, and
+`ou=daemons` and not `ou=Etudiants`
 
 Give a password to this object (like we gave one to `Toto Lapin`)
 
