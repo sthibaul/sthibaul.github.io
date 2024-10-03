@@ -445,6 +445,14 @@ have a `userPassword` field). You can use `Dovecot` as `cn` and `Mailbox` as
 
 Give a password to this object (like we gave one to `Toto Lapin`)
 
+Note that this is a LDAP user, not a Unix user. To test that this LDAP user can indeed connect to the LDAP server, you can use
+
+```shell
+$ ldapsearch -H ldapi:/// -x -W -D uid=dovecot,ou=daemons,dc=adsillh,dc=local -b dc=adsillh,dc=local
+```
+
+You will notice that it cannot read the `userPassword` field, it's indeed a different LDAP user than the root user, with different privileges.
+
 ## Create vmail hosting
 
 Even if we don't want to have a Unix account for each mail account, we need a
