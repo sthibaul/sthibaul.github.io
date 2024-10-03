@@ -8,7 +8,7 @@ SVGs=$(FIGs:.fig=.svg)
 all: $(HTMLs) $(PDFs) $(PNGs) $(SVGs)
 
 %.html: %.md
-	pandoc -o $@ $<
+	pandoc -s -o $@ $<
 %.pdf: %.md Makefile $(PNGs) $(SVGs)
 	pandoc -V papersize=A4 \
 		-V margin-left=2cm \
@@ -22,3 +22,6 @@ all: $(HTMLs) $(PDFs) $(PNGs) $(SVGs)
 
 %.svg: %.fig Makefile
 	fig2dev -L svg -m 1.2 $< $@
+
+send: tpnote.html
+	scp $< labri:public_html/install-config/
