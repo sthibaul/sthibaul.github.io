@@ -164,3 +164,15 @@ Pour l'utilisateur, cela oblige vraiment à utiliser le serveur submission pour 
 * SPF: facile, il suffit d'ajouter le champ DNS pour déclarer ses serveurs de mail
 * DKIM: fabriquer une clé pour signer, l'enregistrer dans DNS
 * DMARC: une fois qu'on est sûr d'avoir correctement mis en œuvre SPF et DKIM, enregistrer dans DNS qu'ils sont obligatoires.
+
+# En résumé, schéma général:
+
+Les complexités sont venues progressivement avec le spam...
+
+- À l'origine, un expéditeur (From:) pouvait dire à son ordinateur d'envoyer directement ses mails au serveur de mail du fournisseur de mail du destinataire (To:), via le port 25.
+- Bien souvent le FAI fournit un smarthost qui s'occupe de relayer le mail. Chez Orange, par exemple, c'est devenu obligatoire, pour pouvoir filtrer le spam.
+- Pour éviter le spam, les fournisseurs de de mail ajoutent un enregistrement SPF voire DKIM, ce qui oblige à utiliser leur serveur submission pour relayer le mail, en fonction du `From:` du mail, plutôt que le smarthost du FAI.
+
+Le destinataire peut interroger, depuis n'importe où sur Internet, le serveur de mail directement via pop3s/imaps, ou en https via une couche de webmail.
+
+![](mail.svg)
