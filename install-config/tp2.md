@@ -194,14 +194,14 @@ Maintenant que la zone est mise à jour dynamiquement, le fichier de zone peut
 sécurité, on peut désactiver temporairement la mise à jour automatique:
 
 ```shell
-rndc freeze adsillh.local
+# rndc freeze adsillh.local
 ```
 
 On peut alors modifier les fichiers `db.`. Une fois qu'on a fini on peut
 réautoriser les mises à jour automatiques:
 
 ```shell
-rndc thaw adsillh.local
+# rndc thaw adsillh.local
 ```
 
 D'autre part, il ne suffit plus d'utiliser
