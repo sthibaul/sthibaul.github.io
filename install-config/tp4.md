@@ -77,7 +77,7 @@ On peut y voir que le domaine utilisé est actuellement `my-domain.com`, on
 voudrait changer cela. Pour cela il faut modifier les attributs correspondant de
 l'objet `'olcDatabase={2}mdb,cn=config'`. On pourrait taper tout en interactif,
 mais le risque de typo est grand. Il vaut donc mieux préparer un fichier
-`todo.ldif` contenant les modifications voulues:
+`modify.ldif` contenant les modifications voulues:
 
 ```ldif
 dn: olcDatabase={2}mdb,cn=config
@@ -115,10 +115,10 @@ replace: olcRootDN
 olcRootDN: cn=Manager,dc=adsillh,dc=local
 ```
 
-Une fois le fichier `todo.ldif` préparé au propre, on peut l'appliquer à la base:
+Une fois le fichier `modif.ldif` préparé au propre, on peut l'appliquer à la base:
 
 ```shell
-# ldapmodify -H ldapi:/// -Y EXTERNAL -f todo.ldif
+# ldapmodify -H ldapi:/// -Y EXTERNAL -f modif.ldif
 ```
 
 On peut revérifier la configuration avec la commande `ldapsearch` pour constater que cela a bien eu effet.
@@ -158,7 +158,7 @@ On peut injecter, et l'on peut vérifier que cela a bien été mis à jour.
 
 Maintenant que l'on peut écrire dans la base LDAP, créons une simple
 hiérarchie `dc=adsillh,dc=local` avec juste des utilisateurs dedans. On
-prépare le fichier `todo.ldif` pour ajouter les objets conteneurs:
+prépare le fichier `add.ldif` pour ajouter les objets conteneurs:
 
 ```ldif
 dn: dc=adsillh,dc=local
@@ -173,10 +173,10 @@ objectClass: organizationalUnit
 ou: Etudiants
 ```
 
-Ici on n'a pas mis de `changetype`, car l'on injecte plutôt avec `ldapadd` qui est fait pour créer des objets:
+Ici on n'a pas mis de `changetype`, car l'on injecte plutôt avec `ldapadd` qui est fait pour créer des objets, la syntaxe de `add.ldif` est différente du `modif.ldif`:
 
 ```shell
-# ldapadd -H ldapi:/// -Y EXTERNAL -f todo.ldif
+# ldapadd -H ldapi:/// -Y EXTERNAL -f add.ldif
 ```
 
 ## Un utilisateur
