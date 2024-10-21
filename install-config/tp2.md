@@ -189,7 +189,22 @@ pour désactiver l'optimisation.
 
 ## Attention par contre
 
-Maintenant que la zone est mise à jour dynamiquement, il ne suffit plus d'utiliser
+Maintenant que la zone est mise à jour dynamiquement, le fichier de zone peut
+être modifié à tout moment par dhcp ! Pour pouvoir modifier la zone en toute
+sécurité, on peut désactiver temporairement la mise à jour automatique:
+
+```shell
+rndc freeze adsillh.local
+```
+
+On peut alors modifier les fichiers `db.`. Une fois qu'on a fini on peut
+réautoriser les mises à jour automatiques:
+
+```shell
+rndc thaw adsillh.local
+```
+
+D'autre part, il ne suffit plus d'utiliser
 
 ```shell
 # systemctl reload named

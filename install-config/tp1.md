@@ -68,18 +68,21 @@ Il y a plusieurs éléments qu'on doit/veut configurer en particulier:
   * Il suffit de rentrer dans la configuration, et cliquer sur `Fait`: puisqu'il y a un seul disque dur, il n'y a pas vraiment de question à se poser :)
 
 * Réseau & nom d'hôte
-  * La première carte réseau, on peut la connecter simplement, elle est branchée en NAT vers Internet
-    * Dans sa configuration, dans l'onglet `Général`, activez la connexion automatique
-  * La deuxième carte réseau, on la connecte aussi, mais dans sa configuration:
-    * dans l'onglet `Général`, activez la connexion automatique
+  * La première carte réseau est simplement branchée en NAT vers Internet
+    * basculer l'interrupteur en haut à droite pour la connecter
+    * Avec le bouton "Configurer..." en bas à droite, dans l'onglet `Général`, activez "Se connecter automatiquement"
+  * La deuxième carte réseau est sur le réseau virtuel local
+    * dans sa configuration, dans l'onglet `Général`, activez "Se connecter automatiquement"
+    * dans l'onglet Paramètres IPv4:
     * on bascule en mode manuel,
-    * et on ajoute l'adresse 192.168.56.10 à la main:
+    * Avec le bouton Routes... en bas, cocher "Utiliser cette connexion uniquement pour les ressources de son réseau"
+    * on ajoute l'adresse 192.168.56.10 à la main:
 
   ![config-reseau-serveur](install_alma_srv_network.png)
   
 
 * Commencer l'installation
-* Cela dure une dizaine de minutes. Pendant ce temps, passez à la création+configuration+installation de la VM "client"
+* Cela dure une dizaine de minutes. Pendant ce temps, passez à la création+configuration+installation de la VM "client" de la section suivante, et revenez ici pendant que la VM client s'installe.
 * Terminer en faisant Redémarrer le système
 
 * On arrive sur une bannière de login, vous pouvez essayer de vous logguer en tant que `root`, la VM est installée !
@@ -182,101 +185,6 @@ C'est comme pour la VM "serveur" sauf qu'on n'a pas besoin de créer un autre vb
 C'est comme pour la VM "serveur", sauf que pour la deuxième carte réseau, on n'ajoute pas d'adresse à la main, on le fera via dhcp que l'on va installer.
 
 Pendant que la VM s'installe, revenez sur la partie installation et configuration de la VM serveur.
-
-# Si vous avez un souci de réseau
-
-Vérifiez votre configuration, et notamment les éléments
-
-```
-DEFROUTE
-ONBOOT
-IPV4_DNS_PRIORITY
-```
-
-Dans `/etc/sysconfig/network-scripts/ifcfg-enp0s3` (la première carte réseau)
-
-```
-TYPE=Ethernet
-PROXY_METHOD=none
-BROWSER_ONLY=no
-BOOTPROTO=dhcp
-DEFROUTE=yes
-IPV4_FAILURE_FATAL=no
-IPV6INIT=yes
-IPV6_AUTOCONF=yes
-IPV6_DEFROUTE=yes
-IPV6_FAILURE_FATAL=no
-IPV6_ADDR_GEN_MODE=eui64
-NAME=enp0s3
-UUID=dacd9599-a254-4fc4-ad1b-e80d3956173b    # ou toute autre valeur
-DEVICE=enp0s3
-ONBOOT=yes
-```
-
-(on veut qu'elle soit allumée automatiquement et soit utilisée comme route par
-défaut.)
-
-Et dans `/etc/sysconfig/network-scripts/ifcfg-enp0s8` (la deuxème carte réseau), sur *le serveur*:
-
-```
-TYPE=Ethernet
-PROXY_METHOD=none
-BROWSER_ONLY=no
-BOOTPROTO=none
-DEFROUTE=no
-IPV4_FAILURE_FATAL=no
-IPV6INIT=yes
-IPV6_AUTOCONF=yes
-IPV6_DEFROUTE=yes
-IPV6_FAILURE_FATAL=no
-IPV6_ADDR_GEN_MODE=eui64
-NAME=enp0s8
-UUID=dbc6ccab-ec0f-4b0e-8edb-f3b8673c3081    # ou toute autre valeur
-DEVICE=enp0s8
-ONBOOT=yes
-IPADDR=192.168.56.10
-PREFIX=24
-DNS1=127.0.0.1
-DOMAIN=adsillh.local
-IPV4_DNS_PRIORITY=-10
-```
-
-(on veut qu'elle soit allumée automatiquement mais ne soit pas utilisée
-comme route par défaut, par contre le DNS `127.0.0.1` doit être utilisé par
-défaut.)
-
-Et dans `/etc/sysconfig/network-scripts/ifcfg-enp0s8` (la deuxème carte réseau), sur *le client*:
-
-```
-TYPE=Ethernet
-PROXY_METHOD=none
-BROWSER_ONLY=no
-BOOTPROTO=dhcp
-DEFROUTE=no
-IPV4_FAILURE_FATAL=no
-IPV6INIT=yes
-IPV6_AUTOCONF=yes
-IPV6_DEFROUTE=yes
-IPV6_FAILURE_FATAL=no
-IPV6_ADDR_GEN_MODE=eui64
-NAME=enp0s8
-UUID=dacd9599-a254-4fc4-ad1b-e80d3956173b    # ou toute autre valeur
-DEVICE=enp0s8
-ONBOOT=yes
-IPV4_DNS_PRIORITY=-10
-```
-
-(on veut qu'elle soit allumée automatiquement mais ne soit pas utilisée comme
-route par défaut, par contre le DNS fourni par DHCP doit être utilisé par
-défaut.)
-
-Si vous changez quelque chose dans ces fichiers, il faut utiliser
-
-```shell
-# nmcli con reload
-```
-
-Pour les recharger, avant d'utiliser `up` / `down`
 
 # Exercice 1: ajouter un serveur DHCP
 
@@ -529,9 +437,10 @@ Les commandes suivantes doivent fonctionner :
 ```shell
 # nslookup 192.168.56.10 127.0.0.1
 # nslookup alma-server 127.0.0.1
+# nslookup www.gnu.org 127.0.0.1
 ```
 
-Maintenant que cela fonctionne, on peut se mettre à l'utiliser:
+Maintenant que cela fonctionne, on peut se mettre à l'utiliser en priorité plutôt que le DNS du cremi:
 
 ```shell
 # nmcli con modify enp0s8 ipv4.dns 127.0.0.1
@@ -552,6 +461,7 @@ Les commandes suivantes doivent fonctionner :
 ```shell
 # nslookup 192.168.56.10
 # nslookup alma-server
+# nslookup www.gnu.org
 ```
 
 *Attention*, si vous changez quelque chose dans votre zone, il *faut* augmenter la valeur du serial, sinon la modification ne sera en général pas prise en compte !
@@ -671,6 +581,14 @@ Name:   www.gnu.org
 Address: 2001:470:142:5::116
 ```
 
+Mais on veut pouvoir garder à la fois `enp0s3` et enp0s8` allumés pour à la fois accéder à Internet et à notre VM serveur. On peut indiquer qu'on veut prioriser le DNS de notre serveur par rapport à celui fourni par le cremi:
+
+```
+# nmcli con modify enp0s8 ipv4.dns-priority -10
+# nmcli device reapply enp0s8
+# nmcli con up enp0s3
+```
+
 # Exercice 3 (bonus): ajouter un disque dur
 
 ## Ajout du disque dur
@@ -761,4 +679,99 @@ Dans le groupe de volume, on a deux volumes logiques `root` (pour `/`) et `swap`
 ```
 
 * Et vous pouvez rajouter encore à chaud 4G à `data`
+
+# Si vous avez un souci de réseau
+
+Vérifiez votre configuration, et notamment les éléments
+
+```
+DEFROUTE
+ONBOOT
+IPV4_DNS_PRIORITY
+```
+
+Dans `/etc/sysconfig/network-scripts/ifcfg-enp0s3` (la première carte réseau)
+
+```
+TYPE=Ethernet
+PROXY_METHOD=none
+BROWSER_ONLY=no
+BOOTPROTO=dhcp
+DEFROUTE=yes
+IPV4_FAILURE_FATAL=no
+IPV6INIT=yes
+IPV6_AUTOCONF=yes
+IPV6_DEFROUTE=yes
+IPV6_FAILURE_FATAL=no
+IPV6_ADDR_GEN_MODE=eui64
+NAME=enp0s3
+UUID=dacd9599-a254-4fc4-ad1b-e80d3956173b    # ou toute autre valeur
+DEVICE=enp0s3
+ONBOOT=yes
+```
+
+(on veut qu'elle soit allumée automatiquement et soit utilisée comme route par
+défaut.)
+
+Et dans `/etc/sysconfig/network-scripts/ifcfg-enp0s8` (la deuxème carte réseau), sur *le serveur*:
+
+```
+TYPE=Ethernet
+PROXY_METHOD=none
+BROWSER_ONLY=no
+BOOTPROTO=none
+DEFROUTE=no
+IPV4_FAILURE_FATAL=no
+IPV6INIT=yes
+IPV6_AUTOCONF=yes
+IPV6_DEFROUTE=yes
+IPV6_FAILURE_FATAL=no
+IPV6_ADDR_GEN_MODE=eui64
+NAME=enp0s8
+UUID=dbc6ccab-ec0f-4b0e-8edb-f3b8673c3081    # ou toute autre valeur
+DEVICE=enp0s8
+ONBOOT=yes
+IPADDR=192.168.56.10
+PREFIX=24
+DNS1=127.0.0.1
+DOMAIN=adsillh.local
+IPV4_DNS_PRIORITY=-10
+```
+
+(on veut qu'elle soit allumée automatiquement mais ne soit pas utilisée
+comme route par défaut, par contre le DNS `127.0.0.1` doit être utilisé par
+défaut.)
+
+Et dans `/etc/sysconfig/network-scripts/ifcfg-enp0s8` (la deuxème carte réseau), sur *le client*:
+
+```
+TYPE=Ethernet
+PROXY_METHOD=none
+BROWSER_ONLY=no
+BOOTPROTO=dhcp
+DEFROUTE=no
+IPV4_FAILURE_FATAL=no
+IPV6INIT=yes
+IPV6_AUTOCONF=yes
+IPV6_DEFROUTE=yes
+IPV6_FAILURE_FATAL=no
+IPV6_ADDR_GEN_MODE=eui64
+NAME=enp0s8
+UUID=dacd9599-a254-4fc4-ad1b-e80d3956173b    # ou toute autre valeur
+DEVICE=enp0s8
+ONBOOT=yes
+IPV4_DNS_PRIORITY=-10
+```
+
+(on veut qu'elle soit allumée automatiquement mais ne soit pas utilisée comme
+route par défaut, par contre le DNS fourni par DHCP doit être utilisé par
+défaut.)
+
+Si vous changez quelque chose dans ces fichiers, il faut utiliser
+
+```shell
+# nmcli con reload
+```
+
+Pour les recharger, avant d'utiliser `up` / `down`
 
