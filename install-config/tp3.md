@@ -477,7 +477,7 @@ Sur la VM client, installez le package `gnutls-utils`
 Vous pouvez alors vous connecter sur le port 587 ainsi:
 
 ```shell
-$ gnutls-cli --no-ca-verification --starttls-proto=smtp --port 587 192.168.56.10
+$ gnutls-cli --no-ca-verification --starttls-proto=smtp --crlf --port 587 192.168.56.10
 ```
 
 Il s'occupe de voir le début de la négociation SMTP et d'utiliser STARTTLS et
